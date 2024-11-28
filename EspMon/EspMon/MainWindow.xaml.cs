@@ -226,6 +226,7 @@ namespace EspMon
 		public ObservableCollection<PortItem> Items { get; } = new ObservableCollection<PortItem>();
 		public void Refresh()
 		{
+			IsStarted = false;
 			var ports = SerialPort.GetPortNames();
 			var portsChecked = new HashSet<string> (ports.Length,StringComparer.InvariantCultureIgnoreCase);
 			foreach(var item in Items)
