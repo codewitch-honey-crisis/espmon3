@@ -1,0 +1,17 @@
+C:\Users\gazto\source\repos\EspMon\EspMon\bin\Release\EspMon.exe.config
+C:\Users\gazto\source\repos\EspMon\EspMon\bin\Release\EspMon.exe
+C:\Users\gazto\source\repos\EspMon\EspMon\bin\Release\EspMon.pdb
+C:\Users\gazto\source\repos\EspMon\EspMon\bin\Release\OpenHardwareMonitorLib.dll
+C:\Users\gazto\source\repos\EspMon\EspMon\obj\Release\EspMon.csproj.AssemblyReference.cache
+C:\Users\gazto\source\repos\EspMon\EspMon\obj\Release\MainWindow.g.cs
+C:\Users\gazto\source\repos\EspMon\EspMon\obj\Release\App.g.cs
+C:\Users\gazto\source\repos\EspMon\EspMon\obj\Release\EspMon_MarkupCompile.cache
+C:\Users\gazto\source\repos\EspMon\EspMon\obj\Release\EspMon_MarkupCompile.lref
+C:\Users\gazto\source\repos\EspMon\EspMon\obj\Release\MainWindow.baml
+C:\Users\gazto\source\repos\EspMon\EspMon\obj\Release\EspMon.g.resources
+C:\Users\gazto\source\repos\EspMon\EspMon\obj\Release\EspMon.Properties.Resources.resources
+C:\Users\gazto\source\repos\EspMon\EspMon\obj\Release\EspMon.csproj.GenerateResource.cache
+C:\Users\gazto\source\repos\EspMon\EspMon\obj\Release\EspMon.csproj.CoreCompileInputs.cache
+C:\Users\gazto\source\repos\EspMon\EspMon\obj\Release\EspMon.csproj.Up2Date
+C:\Users\gazto\source\repos\EspMon\EspMon\obj\Release\EspMon.exe
+C:\Users\gazto\source\repos\EspMon\EspMon\obj\Release\EspMon.pdb
