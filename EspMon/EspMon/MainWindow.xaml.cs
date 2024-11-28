@@ -216,12 +216,12 @@ namespace EspMon
 		private Computer computer = null;
 		_ThreadControl _threadControl = null;
 		Thread _updateThread=null;
-		long _cpuTMax=90;
-		long _gpuTMax=80;
-		long _cpuUsage = 0;
-		long _cpuTemp = 0;
-		long _gpuUsage = 0;
-		long _gpuTemp = 0;
+		volatile int _cpuTMax =90;
+		volatile int _gpuTMax=80;
+		volatile int _cpuUsage = 0;
+		volatile int _cpuTemp = 0;
+		volatile int _gpuUsage = 0;
+		volatile int _gpuTemp = 0;
 		bool _isStarted = false;
 		public ObservableCollection<PortItem> Items { get; } = new ObservableCollection<PortItem>();
 		public void Refresh()
@@ -245,19 +245,19 @@ namespace EspMon
 		}
 		public int CpuUsage
 		{
-			get { return (int)Interlocked.Read(ref _cpuUsage); }
+			get { return _cpuUsage; }
 		}
 		public int CpuTemp
 		{
-			get { return (int)Interlocked.Read(ref _cpuTemp); }
+			get { return _cpuTemp; }
 		}
 		public int GpuUsage
 		{
-			get { return (int)Interlocked.Read(ref _gpuUsage); }
+			get { return _gpuUsage; }
 		}
 		public int GpuTemp
 		{
-			get { return (int)Interlocked.Read(ref _gpuTemp); }
+			get { return _gpuTemp; }
 		}
 		void _CollectSystemInfoThread(object state)
 		{
@@ -350,12 +350,12 @@ namespace EspMon
 					}
 
 				}
-				Interlocked.Exchange(ref tctrl.Parent._cpuTMax , cpuTMax);
-				Interlocked.Exchange(ref tctrl.Parent._gpuTMax , gpuTMax);
-				Interlocked.Exchange(ref tctrl.Parent._cpuUsage , cpuUsage);
-				Interlocked.Exchange(ref tctrl.Parent._cpuTemp , cpuTemp);
-				Interlocked.Exchange(ref tctrl.Parent._gpuUsage , gpuUsage);
-				Interlocked.Exchange(ref tctrl.Parent._gpuTemp , gpuTemp);
+				tctrl.Parent._cpuTMax = cpuTMax;
+				tctrl.Parent._gpuTMax = gpuTMax;
+				tctrl.Parent._cpuUsage = cpuUsage;
+				tctrl.Parent._cpuTemp = cpuTemp;
+				tctrl.Parent._gpuUsage= gpuUsage;
+				tctrl.Parent._gpuTemp = gpuTemp;
 				Thread.Sleep(100);
 			}
 			computer.Close();
@@ -445,7 +445,7 @@ namespace EspMon
 		{
 			get
 			{
-				return (int)Interlocked.Read(ref _cpuTMax);
+				return _cpuTMax;
 			}
 			set
 			{
@@ -464,7 +464,7 @@ namespace EspMon
 		{
 			get
 			{
-				return (int)Interlocked.Read(ref _gpuTMax);
+				return _gpuTMax;
 			}
 			set
 			{
