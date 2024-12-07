@@ -1,23 +1,15 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Configuration.Install;
-using System.Linq;
 using System.Reflection;
 using System.ServiceProcess;
-using System.Text;
 using System.Threading;
-using System.Threading.Tasks;
 
 namespace EspMon
 {
 	public class App : System.Windows.Application
-
 	{
-
 		[STAThread]
-
 		public static void Main(string[] args)
-
 		{
 			if (Environment.UserInteractive)
 			{
@@ -46,7 +38,6 @@ namespace EspMon
 								ManagedInstallerClass.InstallHelper(new string[] { "/u", Assembly.GetExecutingAssembly().Location });
 								break;
 						}
-
 					}
 				}
 			}
@@ -61,6 +52,5 @@ namespace EspMon
 			}
 
 		}
-
 	}
 }
