@@ -82,6 +82,7 @@ namespace EspMon
 						newCtl.PortItems = PortItems;
 						_controller = newCtl;
 					}
+					Refresh();
 					PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(IsInstalled)));
 				}
 			}
