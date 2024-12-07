@@ -4,7 +4,7 @@
 winexe
 C#
 .cs
-C:\Users\gazto\source\repos\EspMon\EspMon\obj\Debug\
+C:\Users\gazto\Documents\PlatformIO\Projects\espmon3\EspMon\obj\Debug\
 EspMon
 none
 false
@@ -13,7 +13,7 @@ DEBUG;TRACE
 1219584333
 
 15631089245
-181104899048
+181600592746
 MainWindow.xaml;
 
 False

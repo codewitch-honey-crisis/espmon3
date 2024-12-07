@@ -5,6 +5,7 @@ using System.Linq;
 using System.Reflection;
 using System.ServiceProcess;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace EspMon
@@ -20,24 +21,33 @@ namespace EspMon
 		{
 			if (Environment.UserInteractive)
 			{
-				if (args.Length == 0)
+				var appName = Assembly.GetEntryAssembly().GetName().Name;
+				var notAlreadyRunning = true;
+				using (var mutex = new Mutex(true, appName + "Singleton", out notAlreadyRunning))
 				{
-					App app = new App();
+					if (notAlreadyRunning)
+					{
+						if (args.Length == 0)
+						{
+							App app = new App();
 
-					app.StartupUri = new System.Uri("MainWindow.xaml", System.UriKind.Relative);
+							app.StartupUri = new System.Uri("MainWindow.xaml", System.UriKind.Relative);
 
-					app.Run();
-					return;
-				}
-				string parameter = string.Concat(args);
-				switch (parameter)
-				{
-					case "--install":
-						ManagedInstallerClass.InstallHelper(new string[] { Assembly.GetExecutingAssembly().Location });
-						break;
-					case "--uninstall":
-						ManagedInstallerClass.InstallHelper(new string[] { "/u", Assembly.GetExecutingAssembly().Location });
-						break;
+							app.Run();
+							return;
+						}
+						string parameter = string.Concat(args);
+						switch (parameter)
+						{
+							case "--install":
+								ManagedInstallerClass.InstallHelper(new string[] { Assembly.GetExecutingAssembly().Location });
+								break;
+							case "--uninstall":
+								ManagedInstallerClass.InstallHelper(new string[] { "/u", Assembly.GetExecutingAssembly().Location });
+								break;
+						}
+
+					}
 				}
 			}
 			else
