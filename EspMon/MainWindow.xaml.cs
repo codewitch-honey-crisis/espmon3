@@ -27,7 +27,7 @@ namespace EspMon
 	/// </summary>
 	public partial class MainWindow : Window
 	{
-		MessageWindow _msgWindow;
+		AppActivator _appActivator;
 		private System.Windows.Forms.ContextMenu NotifyContextMenu;
 		private System.Windows.Forms.MenuItem NotifyContextMenuStarted;
 		private System.Windows.Forms.MenuItem NotifyContextMenuSeparator;
@@ -72,10 +72,16 @@ namespace EspMon
 			this.NotifyContextMenuSeparator,
 			this.NotifyContextMenuStarted});
 			_notifyIcon.ContextMenu = this.NotifyContextMenu;
-			_msgWindow = new MessageWindow(this);
+			_appActivator = new AppActivator();
+			_appActivator.AppActivated += _appActivator_AppActivated;
 			_ViewModel.PropertyChanging += _ViewModel_PropertyChanging;
 			_ViewModel.InstallComplete += _ViewModel_InstallComplete;
 			_ViewModel.UninstallComplete += _ViewModel_UninstallComplete;
+		}
+
+		private void _appActivator_AppActivated(object sender, EventArgs e)
+		{
+			ActivateApp();
 		}
 
 		private void _ViewModel_UninstallComplete(object sender, EventArgs e)
@@ -136,7 +142,7 @@ namespace EspMon
 		}
 		protected override void OnClosed(EventArgs e)
 		{
-			_msgWindow.Dispose();
+			_appActivator.Dispose();
 			if (!_ViewModel.IsInstalled)
 			{
 				_ViewModel.IsStarted = false;

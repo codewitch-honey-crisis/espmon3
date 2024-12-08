@@ -1,14 +1,32 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+using System.Reflection;
+using System.Runtime.InteropServices;
+using System.Text;
 
 namespace EspMon
 {
-	class MessageWindow : IDisposable
+	class AppActivator : IDisposable
 	{
-		public const int WM_CUSTOM_ACTIVATE = 0x801C;
-		WeakReference<MainWindow> _appWindow;
-		public static MessageWindow Window { get; private set; }
+		private const int WM_CUSTOM_ACTIVATE = 0x801C;
+		public static AppActivator Instance { get; private set; }
 		delegate IntPtr WndProc(IntPtr hWnd, uint msg, IntPtr wParam, IntPtr lParam);
+		[DllImport("user32.dll", CharSet = CharSet.Unicode)]
+		static extern bool PostMessage(IntPtr hWnd, uint Msg, IntPtr wParam, IntPtr lParam);
 
+		[DllImport("user32.dll", CharSet = CharSet.Unicode)]
+		private static extern int GetWindowText(IntPtr hWnd, StringBuilder strText, int maxCount);
+
+		[DllImport("user32.dll", CharSet = CharSet.Unicode)]
+		private static extern int GetWindowTextLength(IntPtr hWnd);
+
+		[DllImport("user32.dll")]
+		private static extern bool EnumWindows(EnumWindowsProc enumProc, IntPtr lParam);
+
+		// Delegate to filter which windows to include 
+		public delegate bool EnumWindowsProc(IntPtr hWnd, IntPtr lParam);
 		[System.Runtime.InteropServices.StructLayout(
 			System.Runtime.InteropServices.LayoutKind.Sequential,
 		   CharSet = System.Runtime.InteropServices.CharSet.Unicode
@@ -86,22 +104,22 @@ namespace EspMon
 				m_disposed = true;
 			}
 		}
-		~MessageWindow()
+		~AppActivator()
 		{
 			Dispose(false);
 		}
-		public MessageWindow(MainWindow appWindow)
+		public event EventHandler AppActivated;
+		public AppActivator()
 		{
-			if (Window != null)
+			if (Instance != null)
 			{
 				throw new InvalidOperationException("A message window already exists");
 			}
-			_appWindow = new WeakReference<MainWindow>(appWindow);
 			m_wnd_proc_delegate = ForwardWndProc;
 
 			// Create WNDCLASS
 			WNDCLASS wind_class = new WNDCLASS();
-			wind_class.lpszClassName = "CEspMon";
+			wind_class.lpszClassName = Assembly.GetEntryAssembly().GetName().Name+"ActCls";
 			wind_class.lpfnWndProc = System.Runtime.InteropServices.Marshal.GetFunctionPointerForDelegate(m_wnd_proc_delegate);
 
 			UInt16 class_atom = RegisterClassW(ref wind_class);
@@ -112,12 +130,12 @@ namespace EspMon
 			{
 				throw new System.Exception("Could not register window class");
 			}
-			Window = this;
+			Instance = this;
 			// Create window
 			m_hwnd = CreateWindowExW(
 				0,
-				"CEspMon",
-				"Esp Mon Activator",
+				wind_class.lpszClassName,
+				Assembly.GetEntryAssembly().GetName().Name+" Activator",
 				0,
 				0,
 				0,
@@ -130,31 +148,69 @@ namespace EspMon
 			);
 			
 		}
-		private MainWindow _AppWindow
-		{
-			get
-			{
-				if (m_disposed)
-				{
-					throw new ObjectDisposedException(nameof(MessageWindow));
-				}
-				MainWindow result;
-				if (_appWindow.TryGetTarget(out result))
-				{
-					return result;
-				}
-				throw new InvalidOperationException("The application is closing");
-			}
-		}
+
 		private static IntPtr ForwardWndProc(IntPtr hWnd, uint msg, IntPtr wParam, IntPtr lParam)
 		{
-			if(msg==WM_CUSTOM_ACTIVATE && Window!=null && Window._AppWindow!=null)
+			if(msg==WM_CUSTOM_ACTIVATE && Instance!=null)
 			{
-				Window._AppWindow.ActivateApp();
+				Instance.AppActivated?.Invoke(Instance,EventArgs.Empty);
 			}
 			return DefWindowProcW(hWnd, msg, wParam, lParam);
 		}
 
 		private WndProc m_wnd_proc_delegate;
+
+		public static bool ActivateExisting()
+		{
+			IntPtr hwnd = FindWindowsWithText(Assembly.GetEntryAssembly().GetName().Name+" Activator").FirstOrDefault();
+			if (hwnd != IntPtr.Zero)
+			{
+				PostMessage(hwnd, AppActivator.WM_CUSTOM_ACTIVATE, IntPtr.Zero, IntPtr.Zero);
+				return true;
+			}
+			return false;
+		}
+		static string GetWindowText(IntPtr hWnd)
+		{
+			int size = GetWindowTextLength(hWnd);
+			if (size > 0)
+			{
+				var builder = new StringBuilder(size + 1);
+				GetWindowText(hWnd, builder, builder.Capacity);
+				return builder.ToString();
+			}
+
+			return String.Empty;
+		}
+
+		static IEnumerable<IntPtr> FindWindows(EnumWindowsProc filter)
+		{
+			IntPtr found = IntPtr.Zero;
+			List<IntPtr> windows = new List<IntPtr>();
+
+			EnumWindows(delegate (IntPtr wnd, IntPtr param)
+			{
+				if (filter(wnd, param))
+				{
+					// only add the windows that pass the filter
+					windows.Add(wnd);
+				}
+
+				// but return true here so that we iterate all windows
+				return true;
+			}, IntPtr.Zero);
+
+			return windows;
+		}
+
+		/// <summary> Find all windows that contain the given title text </summary>
+		/// <param name="titleText"> The text that the window title must contain. </param>
+		public static IEnumerable<IntPtr> FindWindowsWithText(string titleText)
+		{
+			return FindWindows(delegate (IntPtr wnd, IntPtr param)
+			{
+				return GetWindowText(wnd).Contains(titleText);
+			});
+		}
 	}
 }
