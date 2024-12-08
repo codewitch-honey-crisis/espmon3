@@ -1,4 +1,4 @@
-﻿<Window x:Class="EspMon.MainWindow"
+<Window x:Class="EspMon.MainWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
@@ -6,40 +6,45 @@
         xmlns:local="clr-namespace:EspMon"
         mc:Ignorable="d"
         Title="Esp Mon 3" Height="263" Width="333">
-
-    <Grid VerticalAlignment="Top" HorizontalAlignment="Left" ShowGridLines="False" Width="800" Height="450">
+    <Grid ShowGridLines="False">
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="7*" />
-            <ColumnDefinition Width="153*"/>
+            <ColumnDefinition Width="1*" />
+            <ColumnDefinition Width="1*"/>
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
-            <RowDefinition />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
         </Grid.RowDefinitions>
-        <DockPanel Grid.Column="0" Grid.Row="0" Grid.ColumnSpan="2">
-            <DockPanel DockPanel.Dock="Top">
-                <DockPanel DockPanel.Dock="Top">
-                    <Label x:Name="cpuTmaxLabel" Content="CPU TMax:" DockPanel.Dock="Left"/>
-                    <TextBox x:Name="cpuTmax" Text="{Binding CpuTMax}" Width="90"/>
-                    <Label x:Name="gpuTmaxLabel" Content="GPU TMax:" DockPanel.Dock="Left"/>
-                    <TextBox x:Name="gpuTmax" Text="{Binding GpuTMax}" Width="90"/>
-                    <Label Content=""/>
-                </DockPanel>
-            </DockPanel>
-            <DockPanel DockPanel.Dock="Top">
-                <Label x:Name="comPortsLabel" Content="COM Ports:"/>
-                <Button x:Name="comPortsRefresh" Content="Refresh" Width="90" DockPanel.Dock="Left" Click="comPortsRefresh_Click" />
-                <CheckBox x:Name="isStartedCheckbox" IsChecked="{Binding IsStarted}" Content="Started" DockPanel.Dock="Left" />
-                <CheckBox x:Name="serviceInstalledButton" IsChecked="{Binding IsInstalled}" Content="Installed" DockPanel.Dock="Right" />
-            </DockPanel>
-            <ListBox x:Name="comPortsList" ItemsSource="{Binding PortItems}">
-                <ListBox.ItemTemplate>
-                    <DataTemplate>
-                        <DockPanel>
-                            <CheckBox DockPanel.Dock="Left" IsChecked="{Binding IsChecked}" Content="{Binding Name}"/>
-                        </DockPanel>
-                    </DataTemplate>
-                </ListBox.ItemTemplate>
-            </ListBox>
+
+        <DockPanel>
+            <Label x:Name="cpuTmaxLabel" Content="CPU TMax:" DockPanel.Dock="Left" />
+            <TextBox x:Name="cpuTmax" Text="{Binding CpuTMax}" VerticalContentAlignment="Center" />
         </DockPanel>
+
+        <DockPanel Grid.Column="1">
+            <Label x:Name="gpuTmaxLabel" Content="GPU TMax:" DockPanel.Dock="Left" />
+            <TextBox x:Name="gpuTmax" Text="{Binding GpuTMax}" VerticalContentAlignment="Center" />
+        </DockPanel>
+
+        <DockPanel Grid.Row="1">
+            <Label x:Name="comPortsLabel" Content="COM Ports:" />
+            <Button x:Name="comPortsRefresh" Content="Refresh" DockPanel.Dock="Left" Click="comPortsRefresh_Click" />
+        </DockPanel>
+
+        <DockPanel Grid.Row="1" Grid.Column="1">
+            <CheckBox x:Name="isStartedCheckbox" IsChecked="{Binding IsStarted}" Content="Started" DockPanel.Dock="Top" />
+            <CheckBox x:Name="serviceInstalledButton" IsChecked="{Binding IsInstalled}" Content="Installed" DockPanel.Dock="Bottom" />
+        </DockPanel>
+
+        <ListBox x:Name="comPortsList" ItemsSource="{Binding PortItems}" Grid.Row="2" Grid.ColumnSpan="2">
+            <ListBox.ItemTemplate>
+                <DataTemplate>
+                    <DockPanel>
+                        <CheckBox DockPanel.Dock="Left" IsChecked="{Binding IsChecked}" Content="{Binding Name}"/>
+                    </DockPanel>
+                </DataTemplate>
+            </ListBox.ItemTemplate>
+        </ListBox>
     </Grid>
 </Window>
