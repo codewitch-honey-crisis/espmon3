@@ -34,7 +34,7 @@
 
         <DockPanel Grid.Row="1" Grid.Column="1">
             <CheckBox x:Name="isStartedCheckbox" IsChecked="{Binding IsStarted}" Content="Started" DockPanel.Dock="Top" />
-            <CheckBox x:Name="serviceInstalledButton" IsChecked="{Binding IsInstalled}" Content="Installed" DockPanel.Dock="Bottom" />
+            <CheckBox x:Name="serviceInstalledButton" IsChecked="{Binding IsPersistent}" Content="Persistent" DockPanel.Dock="Bottom" />
         </DockPanel>
 
         <ListBox x:Name="comPortsList" ItemsSource="{Binding PortItems}" Grid.Row="2" Grid.ColumnSpan="2">

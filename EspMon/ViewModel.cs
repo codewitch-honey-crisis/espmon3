@@ -37,7 +37,7 @@ namespace EspMon
 				_controller.PortItems = PortItems; ;
 			}
 		}
-		public bool IsInstalled
+		public bool IsPersistent
 		{
 			get
 			{
@@ -47,10 +47,10 @@ namespace EspMon
 			}
 			set
 			{
-				bool inst = IsInstalled;
+				bool inst = IsPersistent;
 				if (inst != value)
 				{
-					PropertyChanging?.Invoke(this, new PropertyChangingEventArgs(nameof(IsInstalled)));
+					PropertyChanging?.Invoke(this, new PropertyChangingEventArgs(nameof(IsPersistent)));
 					if (!inst)
 					{
 						var task = Task.Run(() => {
@@ -105,7 +105,7 @@ namespace EspMon
 						_controller = newCtl;
 					}
 					Refresh();
-					PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(IsInstalled)));
+					PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(IsPersistent)));
 				}
 			}
 		}

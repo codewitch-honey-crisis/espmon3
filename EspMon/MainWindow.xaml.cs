@@ -100,7 +100,7 @@ namespace EspMon
 
 		private void _ViewModel_PropertyChanging(object sender, PropertyChangingEventArgs e)
 		{
-			if (e.PropertyName == "IsInstalled")
+			if (e.PropertyName == "IsPersistent")
 			{
 				isStartedCheckbox.IsEnabled = false;
 				serviceInstalledButton.IsEnabled = false;
@@ -143,7 +143,7 @@ namespace EspMon
 		protected override void OnClosed(EventArgs e)
 		{
 			_appActivator.Dispose();
-			if (!_ViewModel.IsInstalled)
+			if (!_ViewModel.IsPersistent)
 			{
 				_ViewModel.IsStarted = false;
 			}
