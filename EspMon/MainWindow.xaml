@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:EspMon"
         mc:Ignorable="d"
-        Title="Esp Mon 3" Height="450" Width="800">
+        Title="Esp Mon 3" Height="263" Width="333">
 
     <Grid VerticalAlignment="Top" HorizontalAlignment="Left" ShowGridLines="False" Width="800" Height="450">
         <Grid.ColumnDefinitions>
