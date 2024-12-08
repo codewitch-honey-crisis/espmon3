@@ -75,6 +75,7 @@
       <DependentUpon>EspMonService.cs</DependentUpon>
     </Compile>
     <Compile Include="MessageQueue.cs" />
+    <Compile Include="MessageWindow.cs" />
     <Compile Include="MessagingSynchronizationContext.cs" />
     <Compile Include="SvcController.cs" />
     <Compile Include="ViewModel.cs" />

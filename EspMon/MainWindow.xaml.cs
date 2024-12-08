@@ -27,6 +27,7 @@ namespace EspMon
 	/// </summary>
 	public partial class MainWindow : Window
 	{
+		MessageWindow _msgWindow;
 		private System.Windows.Forms.ContextMenu NotifyContextMenu;
 		private System.Windows.Forms.MenuItem NotifyContextMenuStarted;
 		private System.Windows.Forms.MenuItem NotifyContextMenuSeparator;
@@ -72,8 +73,13 @@ namespace EspMon
 			this.NotifyContextMenuSeparator,
 			this.NotifyContextMenuStarted});
 			_notifyIcon.ContextMenu = this.NotifyContextMenu;
+			_msgWindow = new MessageWindow(this);
 		}
-
+		public void ActivateApp()
+		{
+			Show();
+			WindowState = _storedWindowState;
+		}
 		private void NotifyContextMenuStarted_Click(object sender, EventArgs e)
 		{
 			_ViewModel.IsStarted = !_ViewModel.IsStarted;
@@ -88,8 +94,7 @@ namespace EspMon
 		
 		private void NotifyContextMenuShow_Click(object sender, EventArgs e)
 		{
-			Show();
-			WindowState = _storedWindowState;
+			ActivateApp();
 		}
 
 		private void MainWindow_Loaded(object sender, RoutedEventArgs e)
@@ -103,6 +108,7 @@ namespace EspMon
 		}
 		protected override void OnClosed(EventArgs e)
 		{
+			_msgWindow.Dispose();
 			if (!_ViewModel.IsInstalled)
 			{
 				_ViewModel.IsStarted = false;
@@ -133,8 +139,7 @@ namespace EspMon
 
 		void _notifyIcon_Click(object sender, EventArgs e)
 		{
-			Show();
-			WindowState = _storedWindowState;
+			ActivateApp();
 		}
 
 		private void installService_Click(object sender, RoutedEventArgs e)
