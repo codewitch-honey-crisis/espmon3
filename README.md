@@ -16,7 +16,9 @@ Current device support (other ESP32 based devices can easily be added by editing
 - M5 Stack Fire
 - Espressif ESP_WROVER_KIT 4.1
 - Makerfabs ESP Display Parellel 3.5inch
-- Makerfabs ESP Display 4inch*
-- Makerfabs ESP Display 4.3inch*
+- Makerfabs ESP Display 4inch**
+- Makerfabs ESP Display 4.3inch**
 - Makerfabs ESP Display 7inch (1024x600)
 - Waveshare ESP32S3 4.3inch
+
+** presently display artifacts due to lcd_config.h settings issues
