@@ -46,12 +46,10 @@ namespace EspMon
 				if (stm != null)
 				{
 					_notifyIcon = new System.Windows.Forms.NotifyIcon();
-					_notifyIcon.BalloonTipText = "The Esp Mon has been minimised. Click the tray icon to show.";
+					_notifyIcon.BalloonTipText = "Esp Mon has been minimised. Click the tray icon to show.";
 					_notifyIcon.BalloonTipTitle = "Esp Mon";
 					_notifyIcon.Text = "Esp Mon";
-					_notifyIcon.Click += new EventHandler(_notifyIcon_Click);
-					//_notifyIcon.ContextMenu = new System.Windows.Forms.ContextMenu();
-					_notifyIcon.Icon = new System.Drawing.Icon(stm);
+					_notifyIcon.Click += new EventHandler(_notifyIcon_Click);					_notifyIcon.Icon = new System.Drawing.Icon(stm);
 					_notifyIcon.Visible = true;	
 				}
 			}
