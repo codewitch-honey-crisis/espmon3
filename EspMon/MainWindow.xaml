@@ -9,12 +9,13 @@
 
     <Grid VerticalAlignment="Top" HorizontalAlignment="Left" ShowGridLines="False" Width="800" Height="450">
         <Grid.ColumnDefinitions>
-            <ColumnDefinition />
+            <ColumnDefinition Width="7*" />
+            <ColumnDefinition Width="153*"/>
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
             <RowDefinition />
         </Grid.RowDefinitions>
-        <DockPanel Grid.Column="0" Grid.Row="0">
+        <DockPanel Grid.Column="0" Grid.Row="0" Grid.ColumnSpan="2">
             <DockPanel DockPanel.Dock="Top">
                 <DockPanel DockPanel.Dock="Top">
                     <Label x:Name="cpuTmaxLabel" Content="CPU TMax:" DockPanel.Dock="Left"/>
