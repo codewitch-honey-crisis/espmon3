@@ -1,5 +1,6 @@
 ﻿using Microsoft.Win32;
 
+using System;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using System.ComponentModel;
@@ -9,12 +10,16 @@ using System.IO.Ports;
 using System.Linq;
 using System.Reflection;
 using System.ServiceProcess;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace EspMon
 {
 	internal class ViewModel : INotifyPropertyChanging, INotifyPropertyChanged
 	{
 		private Controller _controller;
+		public event EventHandler InstallComplete;
+		public event EventHandler UninstallComplete;
 		public event PropertyChangedEventHandler PropertyChanged;
 		public event PropertyChangingEventHandler PropertyChanging;
 		public ObservableCollection<PortItem> PortItems { get; private set; } = new ObservableCollection<PortItem>();
@@ -48,7 +53,15 @@ namespace EspMon
 					PropertyChanging?.Invoke(this, new PropertyChangingEventArgs(nameof(IsInstalled)));
 					if (!inst)
 					{
-						ManagedInstallerClass.InstallHelper(new string[] { Assembly.GetExecutingAssembly().Location });
+						var task = Task.Run(() => {
+							ManagedInstallerClass.InstallHelper(new string[] { Assembly.GetExecutingAssembly().Location });
+						});
+						var sync = SynchronizationContext.Current;
+						task.GetAwaiter().OnCompleted(() => {
+							sync.Post((object state) => {
+								InstallComplete?.Invoke(state, EventArgs.Empty);
+							}, this);
+						});
 						var path = Assembly.GetExecutingAssembly().Location;
 						path = Path.Combine(Path.GetDirectoryName(path), "EspMon.cfg");
 						if(!File.Exists(path))
@@ -75,7 +88,16 @@ namespace EspMon
 						{
 							IsStarted = false;
 						}
-						ManagedInstallerClass.InstallHelper(new string[] { "/u", Assembly.GetExecutingAssembly().Location});
+						var task = Task.Run(() =>
+						{
+							ManagedInstallerClass.InstallHelper(new string[] { "/u", Assembly.GetExecutingAssembly().Location });
+						});
+						var sync = SynchronizationContext.Current;
+						task.GetAwaiter().OnCompleted(() => {
+							sync.Post((object state) => { 
+								UninstallComplete?.Invoke(state,EventArgs.Empty);
+							}, this);
+						});
 						var newCtl = new HostedController();
 						newCtl.PropertyChanging += NewCtl_PropertyChanging;
 						newCtl.PropertyChanged += NewCtl_PropertyChanged;

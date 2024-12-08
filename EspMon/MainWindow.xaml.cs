@@ -37,6 +37,7 @@ namespace EspMon
 		public MainWindow()
 		{
 			InitializeComponent();
+			
 			this.Loaded += MainWindow_Loaded;
 			_ViewModel = new ViewModel();
 			DataContext = _ViewModel;
@@ -74,7 +75,36 @@ namespace EspMon
 			this.NotifyContextMenuStarted});
 			_notifyIcon.ContextMenu = this.NotifyContextMenu;
 			_msgWindow = new MessageWindow(this);
+			_ViewModel.PropertyChanging += _ViewModel_PropertyChanging;
+			_ViewModel.InstallComplete += _ViewModel_InstallComplete;
+			_ViewModel.UninstallComplete += _ViewModel_UninstallComplete;
 		}
+
+		private void _ViewModel_UninstallComplete(object sender, EventArgs e)
+		{
+			isStartedCheckbox.IsEnabled = true;
+			serviceInstalledButton.IsEnabled = true;
+			serviceInstalledButton.IsChecked = false;
+		}
+
+		private void _ViewModel_InstallComplete(object sender, EventArgs e)
+		{
+			isStartedCheckbox.IsEnabled = true;
+			serviceInstalledButton.IsEnabled = true;
+			serviceInstalledButton.IsChecked = true;
+		}
+
+		private void _ViewModel_PropertyChanging(object sender, PropertyChangingEventArgs e)
+		{
+			if (e.PropertyName == "IsInstalled")
+			{
+				isStartedCheckbox.IsEnabled = false;
+				serviceInstalledButton.IsEnabled = false;
+				this.UpdateLayout();
+			}
+		}
+
+
 		public void ActivateApp()
 		{
 			Show();
@@ -140,12 +170,6 @@ namespace EspMon
 		void _notifyIcon_Click(object sender, EventArgs e)
 		{
 			ActivateApp();
-		}
-
-		private void installService_Click(object sender, RoutedEventArgs e)
-		{
-			
-			
 		}
     }
 }
