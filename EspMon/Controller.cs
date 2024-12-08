@@ -129,7 +129,7 @@ namespace EspMon
 					}), null);
 				}
 			}
-			
+
 			_syncContext.Send(new SendOrPostCallback((object st) => {
 				for(int i = 0;i< _ports.Count;++i)
 				{
@@ -160,8 +160,12 @@ namespace EspMon
 				}), null);
 			}
 			_syncContext.Post(new SendOrPostCallback((object st) => {
+				PropertyChanging?.Invoke(st, new PropertyChangingEventArgs(nameof(CpuTMax)));
+				PropertyChanged?.Invoke(st, new PropertyChangedEventArgs(nameof(CpuTMax)));
+				PropertyChanging?.Invoke(st, new PropertyChangingEventArgs(nameof(GpuTMax)));
+				PropertyChanged?.Invoke(st, new PropertyChangedEventArgs(nameof(GpuTMax)));
 				OnRefresh();
-			}), null);
+			}), this);
 
 		}
 		

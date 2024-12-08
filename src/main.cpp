@@ -98,15 +98,12 @@ void lcd_buffers_init() {
 #endif
 }
 
-
 const_buffer_stream text_font_stm(bungee,sizeof(bungee));
 
 using screen_t = uix::screen<rgb_pixel<16>>;
 using color_t = color<typename screen_t::pixel_type>;
 using uix_color_t = color<rgba_pixel<32>>;
 using vcolor_t = color<vector_pixel>;
-
-
 
 template<typename ControlSurfaceType>
 class vvert_label : public canvas_control<ControlSurfaceType> {
