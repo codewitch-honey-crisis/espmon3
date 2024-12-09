@@ -435,3 +435,12 @@ Removing EventLog source EspMon Service.
 Service EspMon Service is being removed from the system...
 Service EspMon Service was successfully removed from the system.
 Attempt to stop service EspMon Service.
+Uninstalling assembly 'C:\Users\gazto\Documents\PlatformIO\Projects\espmon3\EspMon\bin\Debug\EspMon.exe'.
+Affected parameters are:
+   logtoconsole = 
+   logfile = C:\Users\gazto\Documents\PlatformIO\Projects\espmon3\EspMon\bin\Debug\EspMon.InstallLog
+   assemblypath = C:\Users\gazto\Documents\PlatformIO\Projects\espmon3\EspMon\bin\Debug\EspMon.exe
+Removing EventLog source EspMon Service.
+Service EspMon Service is being removed from the system...
+Service EspMon Service was successfully removed from the system.
+Attempt to stop service EspMon Service.
