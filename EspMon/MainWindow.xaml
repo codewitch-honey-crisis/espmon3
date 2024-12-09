@@ -4,9 +4,9 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:EspMon"
-        mc:Ignorable="d"
-        Title="Esp Mon 3" Height="263" Width="333">
-    <Grid ShowGridLines="False">
+        mc:Ignorable="d" MinWidth="300" MinHeight="200"
+        Title="Esp Mon 3" Height="200" Width="300">
+    <Grid ShowGridLines="False" Margin="3">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="1*" />
             <ColumnDefinition Width="1*"/>
@@ -17,27 +17,26 @@
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
 
-        <DockPanel>
+        <DockPanel Margin="3" Grid.Column="0">
             <Label x:Name="cpuTmaxLabel" Content="CPU TMax:" DockPanel.Dock="Left" />
             <TextBox x:Name="cpuTmax" Text="{Binding CpuTMax}" VerticalContentAlignment="Center" />
         </DockPanel>
 
-        <DockPanel Grid.Column="1">
+        <DockPanel Grid.Column="1" Margin="3">
             <Label x:Name="gpuTmaxLabel" Content="GPU TMax:" DockPanel.Dock="Left" />
             <TextBox x:Name="gpuTmax" Text="{Binding GpuTMax}" VerticalContentAlignment="Center" />
         </DockPanel>
 
-        <DockPanel Grid.Row="1">
+        <DockPanel Grid.Row="1" Margin="3">
             <Label x:Name="comPortsLabel" Content="COM Ports:" />
             <Button x:Name="comPortsRefresh" Content="Refresh" DockPanel.Dock="Left" Click="comPortsRefresh_Click" />
         </DockPanel>
 
-        <DockPanel Grid.Row="1" Grid.Column="1">
+        <DockPanel Grid.Row="1" Grid.Column="1" Margin="3">
             <CheckBox x:Name="isStartedCheckbox" IsChecked="{Binding IsStarted}" Content="Started" DockPanel.Dock="Top" />
             <CheckBox x:Name="serviceInstalledButton" IsChecked="{Binding IsPersistent}" Content="Persistent" DockPanel.Dock="Bottom" />
         </DockPanel>
-
-        <ListBox x:Name="comPortsList" ItemsSource="{Binding PortItems}" Grid.Row="2" Grid.ColumnSpan="2">
+        <ListBox x:Name="comPortsList" ItemsSource="{Binding PortItems}" Margin="3" Grid.Row="2" Grid.ColumnSpan="2">
             <ListBox.ItemTemplate>
                 <DataTemplate>
                     <DockPanel>
