@@ -147,6 +147,7 @@ namespace EspMon
 			{
 				_ViewModel.IsStarted = false;
 			}
+			_ViewModel.Dispose();
 			_notifyIcon.Dispose();
 			_notifyIcon = null;
 			base.OnClosed(e);

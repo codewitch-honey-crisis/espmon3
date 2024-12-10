@@ -15,9 +15,11 @@ using System.Threading.Tasks;
 
 namespace EspMon
 {
-	internal class ViewModel : INotifyPropertyChanging, INotifyPropertyChanged
+	internal class ViewModel : INotifyPropertyChanging, INotifyPropertyChanged, IDisposable
 	{
 		private Controller _controller;
+		private bool _disposed;
+
 		public event EventHandler InstallComplete;
 		public event EventHandler UninstallComplete;
 		public event PropertyChangedEventHandler PropertyChanged;
@@ -173,6 +175,26 @@ namespace EspMon
 				}
 			}
 			PortItems.Clear();
+		}
+
+		protected virtual void Dispose(bool disposing)
+		{
+			if (!_disposed)
+			{
+				if(_controller!=null && _controller is IDisposable disp) {  disp.Dispose(); }
+				_disposed = true;
+			}
+		}
+
+		~ViewModel()
+		{
+		     Dispose(false);
+		}
+
+		public void Dispose()
+		{
+			Dispose(true);
+			GC.SuppressFinalize(this);
 		}
 	}
 	internal class PortItem : INotifyPropertyChanged

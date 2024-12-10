@@ -20,10 +20,12 @@ using System.Xml.Linq;
 
 namespace EspMon
 {
-	internal abstract class Controller : INotifyPropertyChanged, INotifyPropertyChanging
+	internal abstract class Controller : INotifyPropertyChanged, INotifyPropertyChanging, IDisposable
 	{
 		private SynchronizationContext _syncContext;
 		private ObservableCollection<PortItem> _ports;
+		private bool _disposed;
+
 		public event PropertyChangingEventHandler PropertyChanging;
 		public event PropertyChangedEventHandler PropertyChanged;
 		public const int Baud = 115200;
@@ -201,6 +203,32 @@ namespace EspMon
 
 				}
 			}
+		}
+		protected virtual void OnClose()
+		{
+			StopAll();
+		}
+		protected virtual void Dispose(bool disposing)
+		{
+			if (!_disposed)
+			{
+				OnClose();
+				_disposed = true;
+			}
+		}
+
+		// // TODO: override finalizer only if 'Dispose(bool disposing)' has code to free unmanaged resources
+		// ~Controller()
+		// {
+		//     // Do not change this code. Put cleanup code in 'Dispose(bool disposing)' method
+		//     Dispose(disposing: false);
+		// }
+
+		public void Dispose()
+		{
+			// Do not change this code. Put cleanup code in 'Dispose(bool disposing)' method
+			Dispose(disposing: true);
+			GC.SuppressFinalize(this);
 		}
 	}
 	

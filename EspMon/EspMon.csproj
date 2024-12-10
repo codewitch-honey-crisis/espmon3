@@ -74,9 +74,11 @@
     <Compile Include="EspMonService.Designer.cs">
       <DependentUpon>EspMonService.cs</DependentUpon>
     </Compile>
+    <Compile Include="HostedController.cs" />
     <Compile Include="MessageQueue.cs" />
     <Compile Include="AppActivator.cs" />
     <Compile Include="MessagingSynchronizationContext.cs" />
+    <Compile Include="PortDispatcher.cs" />
     <Compile Include="SvcController.cs" />
     <Compile Include="ViewModel.cs" />
     <Page Include="MainWindow.xaml">
@@ -84,7 +86,7 @@
       <SubType>Designer</SubType>
     </Page>
     <Compile Include="Controller.cs" />
-    <Compile Include="HostedController.cs" />
+    <Compile Include="HostedController2.cs" />
     <Compile Include="MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>

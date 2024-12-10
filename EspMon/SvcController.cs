@@ -282,6 +282,9 @@ namespace EspMon
 			}
 			return false;
 		}
-				
+		protected override void OnClose()
+		{
+			// don't stop the service
+		}
 	}
 }
