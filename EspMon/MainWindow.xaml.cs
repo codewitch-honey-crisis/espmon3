@@ -204,7 +204,7 @@ namespace EspMon
 
 		private void flashDevice_Click(object sender, RoutedEventArgs e)
 		{
-			_ViewModel.IsStarted = false;
+			
 			RefreshFlashingComPorts();
 			RefreshFlashingDevices();
 			_ViewModel.MainVisibility = Visibility.Hidden;
@@ -281,6 +281,12 @@ namespace EspMon
 		}
 		private void flashDeviceButton_Click(object sender, RoutedEventArgs e)
 		{
+			var startPending = false;
+			if(_ViewModel.IsStarted)
+			{
+				startPending = true;
+				_ViewModel.IsStarted = false;
+			}
 			var path = Path.Combine(Path.GetDirectoryName(Assembly.GetEntryAssembly().Location), "firmware.zip");
 			var path2 = Path.Combine(Path.GetDirectoryName(path), "firmware.bin");
 			_ViewModel.FlashProgress = 1;
@@ -361,6 +367,11 @@ namespace EspMon
 				_ViewModel.IsIdle = true;
 				DoEvents();
 			}
+			if(startPending)
+			{
+				_ViewModel.IsStarted = true;
+			}
+
 		}
 	}
 }
