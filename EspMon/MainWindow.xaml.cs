@@ -264,6 +264,7 @@ namespace EspMon
 		{
 			var path = Path.Combine(Path.GetDirectoryName(Assembly.GetEntryAssembly().Location), "firmware.zip");
 			var path2 = Path.Combine(Path.GetDirectoryName(path), "firmware.bin");
+			_ViewModel.FlashProgress = 0;
 			using (var file = ZipFile.OpenRead(path))
 			{
 				foreach (var entry in file.Entries)
@@ -300,23 +301,42 @@ namespace EspMon
 					throw new IOException(
 						"Error burning firmware");
 				}
+				var isprog = false;
 				while (!proc.StandardOutput.EndOfStream)
 				{
 					var line = proc.StandardOutput.ReadLine();
 					if (line != null)
 					{
-						System.Diagnostics.Debug.WriteLine(line);
 						_ViewModel.AppendOutputLine(line);
+						if(line.EndsWith(" %)"))
+						{
+							int idx = line.IndexOf("... ");
+							if(idx>-1)
+							{
+								var num = line.Substring(idx + 5, line.Length - idx - 8);
+								int i;
+								if(int.TryParse(num,out i))
+								{
+									isprog = true;
+									_ViewModel.FlashProgress = i;
+								}
+							}
+						} else if(isprog)
+						{
+							_ViewModel.FlashProgress = 100;
+						}
 						output.ScrollToEnd();
 						DoEvents();
 					}
 				}
 				proc.WaitForExit();
+				
 				try
 				{
 					File.Delete(path2);
 				}
 				catch { }
+				_ViewModel.FlashProgress = 0;
 			}
 		}
 	}

@@ -1,10 +1,12 @@
-#include <memory.h>
-#include <esp_idf_version.h>
-#include <freertos/FreeRTOS.h>
-#include <freertos/task.h>
-#include <freertos/queue.h>
+#if __has_include(<Arduino.h>)
+#include <Arduino.h>
+#include "serial_config.h"
+#else
 #include <driver/uart.h>
 #include <driver/gpio.h>
+#endif
+#include <memory.h>
+#include <esp_idf_version.h>
 #include <esp_err.h>
 #include <esp_log.h>
 #include "serial.hpp"
@@ -13,6 +15,19 @@
 const char* TAG = "Serial";
 
 bool serial_read_packet(response_t* out_resp) {
+#ifdef ARDUINO
+    int i = SER.read();
+    if(i!=EOF) {
+        if(i==1) {
+            return 0!=SER.readBytes((uint8_t*)out_resp,sizeof(out_resp));
+        } else {
+            while(SER.available()) {
+                SER.read();
+            }
+        }
+    }
+    return false;
+#else
     uint8_t tmp;
     if(1==uart_read_bytes(UART_NUM_0,&tmp,1,0)) {
         if(tmp==1) {
@@ -22,14 +37,22 @@ bool serial_read_packet(response_t* out_resp) {
         }
     }
     return false;
+#endif
 }
 void serial_write() {
+#ifdef ARDUINO
+    SER.write((uint8_t)1);
+#else
     char c = 1;
     uart_write_bytes(UART_NUM_0,&c,1);
+#endif
 }
 bool serial_init() {
+#ifdef ARDUINO
+    SER.begin(115200);
+    return true;
+#else
     esp_log_level_set(TAG, ESP_LOG_INFO);
-    
     /* Configure parameters of an UART driver,
      * communication pins and install the driver */
     uart_config_t uart_config;
@@ -53,4 +76,5 @@ bool serial_init() {
 error:
   
     return false;
+#endif
 }

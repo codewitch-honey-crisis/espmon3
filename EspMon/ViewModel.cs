@@ -20,6 +20,7 @@ namespace EspMon
 {
 	internal class ViewModel : INotifyPropertyChanging, INotifyPropertyChanged, IDisposable
 	{
+		int _flashProgress = 0;
 		StringBuilder outputBuffer = new StringBuilder();
 		private Controller _controller;
 		private bool _disposed;
@@ -59,6 +60,16 @@ namespace EspMon
 				PropertyChanging?.Invoke(this, new PropertyChangingEventArgs(nameof(MainVisibility)));
 				_isFlashing = value != System.Windows.Visibility.Visible;
 				PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(MainVisibility)));
+			}
+		}
+		public int FlashProgress
+		{
+			get { return _flashProgress; }
+			set
+			{
+				PropertyChanging?.Invoke(this, new PropertyChangingEventArgs(nameof(FlashProgress)));
+				_flashProgress= value;
+				PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(FlashProgress)));
 			}
 		}
 		public System.Windows.Visibility FlashButtonVisibility
