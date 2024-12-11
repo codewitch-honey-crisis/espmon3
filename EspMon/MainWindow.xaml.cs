@@ -92,25 +92,44 @@ namespace EspMon
 
 		private void _ViewModel_UninstallComplete(object sender, EventArgs e)
 		{
-			isStartedCheckbox.IsEnabled = true;
-			serviceInstalledButton.IsEnabled = true;
-			serviceInstalledButton.IsChecked = false;
+			const bool enabled = true;
+			serviceInstalledButton.IsEnabled= enabled;
+			isStartedCheckbox.IsEnabled = enabled;
+			flashDevice.IsEnabled = enabled;
+			cpuTmax.IsEnabled = enabled;
+			gpuTmax.IsEnabled = enabled;
+			comPortsList.IsEnabled = enabled;
+			refreshComPortCombo.IsEnabled = enabled;
+			
+
 		}
 
 		private void _ViewModel_InstallComplete(object sender, EventArgs e)
 		{
-			isStartedCheckbox.IsEnabled = true;
-			serviceInstalledButton.IsEnabled = true;
-			serviceInstalledButton.IsChecked = true;
+			const bool enabled = true;
+			serviceInstalledButton.IsEnabled = enabled;
+			isStartedCheckbox.IsEnabled = enabled;
+			flashDevice.IsEnabled = enabled;
+			cpuTmax.IsEnabled = enabled;
+			gpuTmax.IsEnabled = enabled;
+			comPortsList.IsEnabled = enabled;
+			refreshComPortCombo.IsEnabled = enabled;
+
 		}
 
 		private void _ViewModel_PropertyChanging(object sender, PropertyChangingEventArgs e)
 		{
-			if (e.PropertyName == "IsPersistent")
+			if(e.PropertyName=="IsPersistent")
 			{
-				isStartedCheckbox.IsEnabled = false;
-				serviceInstalledButton.IsEnabled = false;
-				this.UpdateLayout();
+				bool enabled = false;
+				serviceInstalledButton.IsEnabled = enabled;
+				isStartedCheckbox.IsEnabled = enabled;
+				flashDevice.IsEnabled = enabled;
+				cpuTmax.IsEnabled = enabled;
+				gpuTmax.IsEnabled = enabled;
+				comPortsList.IsEnabled = enabled;
+				refreshComPortCombo.IsEnabled = enabled;
+
 			}
 		}
 
@@ -264,7 +283,9 @@ namespace EspMon
 		{
 			var path = Path.Combine(Path.GetDirectoryName(Assembly.GetEntryAssembly().Location), "firmware.zip");
 			var path2 = Path.Combine(Path.GetDirectoryName(path), "firmware.bin");
-			_ViewModel.FlashProgress = 0;
+			_ViewModel.FlashProgress = 1;
+			_ViewModel.IsIdle = false;
+			DoEvents();
 			using (var file = ZipFile.OpenRead(path))
 			{
 				foreach (var entry in file.Entries)
@@ -336,7 +357,9 @@ namespace EspMon
 					File.Delete(path2);
 				}
 				catch { }
-				_ViewModel.FlashProgress = 0;
+				_ViewModel.FlashProgress = 0; 
+				_ViewModel.IsIdle = true;
+				DoEvents();
 			}
 		}
 	}

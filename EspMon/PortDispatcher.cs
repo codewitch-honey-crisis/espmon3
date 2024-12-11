@@ -110,6 +110,7 @@ namespace EspMon
 			{
 				_disposed = true;
 			}
+			Instance = null;
 		}
 		private static void Port_DataReceived(object sender, SerialDataReceivedEventArgs e)
 		{

@@ -15,11 +15,15 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Shapes;
+using System.Windows.Threading;
+using System.Windows;
+using static System.Windows.Forms.AxHost;
 
 namespace EspMon
 {
 	internal class ViewModel : INotifyPropertyChanging, INotifyPropertyChanged, IDisposable
 	{
+		bool _isIdle = true;
 		int _flashProgress = 0;
 		StringBuilder outputBuffer = new StringBuilder();
 		private Controller _controller;
@@ -72,6 +76,20 @@ namespace EspMon
 				PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(FlashProgress)));
 			}
 		}
+		public bool IsIdle
+		{
+			get { return _isIdle; }
+			set
+			{
+				if (_isIdle != value)
+				{
+					PropertyChanging?.Invoke(this, new PropertyChangingEventArgs(nameof(IsIdle)));
+					_isIdle = value;
+					PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(IsIdle)));
+				}
+			}
+		}
+
 		public System.Windows.Visibility FlashButtonVisibility
 		{
 			get {
@@ -85,6 +103,11 @@ namespace EspMon
 			{
 				return File.Exists(Path.Combine(Assembly.GetEntryAssembly().Location,"firmware.zip"));
 			}
+		}
+		private static void DoEvents()
+		{
+			Application.Current.Dispatcher.Invoke(DispatcherPriority.Background,
+												  new Action(delegate { }));
 		}
 		public bool IsPersistent
 		{
@@ -100,17 +123,14 @@ namespace EspMon
 				if (inst != value)
 				{
 					PropertyChanging?.Invoke(this, new PropertyChangingEventArgs(nameof(IsPersistent)));
+					DoEvents();
 					if (!inst)
 					{
 						var task = Task.Run(() => {
 							ManagedInstallerClass.InstallHelper(new string[] { Assembly.GetExecutingAssembly().Location });
 						});
-						var sync = SynchronizationContext.Current;
-						task.GetAwaiter().OnCompleted(() => {
-							sync.Post((object state) => {
-								InstallComplete?.Invoke(state, EventArgs.Empty);
-							}, this);
-						});
+						task.Wait();
+						InstallComplete?.Invoke(this, EventArgs.Empty);
 						var path = Assembly.GetExecutingAssembly().Location;
 						path = Path.Combine(Path.GetDirectoryName(path), "EspMon.cfg");
 						if(!File.Exists(path))
@@ -143,13 +163,8 @@ namespace EspMon
 						{
 							ManagedInstallerClass.InstallHelper(new string[] { "/u", Assembly.GetExecutingAssembly().Location });
 						});
-						var sync = SynchronizationContext.Current;
-						task.GetAwaiter().OnCompleted(() => {
-							sync.Post((object state) => { 
-								UninstallComplete?.Invoke(state,EventArgs.Empty);
-							}, this);
-						});
-						
+						task.Wait();
+						UninstallComplete?.Invoke(this, EventArgs.Empty);
 						var newCtl = new HostedController();
 						newCtl.PropertyChanging += NewCtl_PropertyChanging;
 						newCtl.PropertyChanged += NewCtl_PropertyChanged;
@@ -158,6 +173,7 @@ namespace EspMon
 					}
 					Refresh();
 					PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(IsPersistent)));
+					DoEvents();
 				}
 			}
 		}
