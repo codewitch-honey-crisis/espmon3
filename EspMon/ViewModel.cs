@@ -1,6 +1,7 @@
 ﻿using Microsoft.Win32;
 
 using System;
+using Path = System.IO.Path;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using System.ComponentModel;
@@ -10,16 +11,19 @@ using System.IO.Ports;
 using System.Linq;
 using System.Reflection;
 using System.ServiceProcess;
+using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Windows.Shapes;
 
 namespace EspMon
 {
 	internal class ViewModel : INotifyPropertyChanging, INotifyPropertyChanged, IDisposable
 	{
+		StringBuilder outputBuffer = new StringBuilder();
 		private Controller _controller;
 		private bool _disposed;
-
+		private bool _isFlashing;
 		public event EventHandler InstallComplete;
 		public event EventHandler UninstallComplete;
 		public event PropertyChangedEventHandler PropertyChanged;
@@ -37,6 +41,38 @@ namespace EspMon
 			{
 				_controller = new HostedController();
 				_controller.PortItems = PortItems; ;
+			}
+		}
+		public System.Windows.Visibility FlashingVisibility { 
+			get { return _isFlashing?System.Windows.Visibility.Visible:System.Windows.Visibility.Hidden; } 
+			set {
+				PropertyChanging?.Invoke(this, new PropertyChangingEventArgs(nameof(FlashingVisibility)));
+				_isFlashing= value==System.Windows.Visibility.Visible;
+				PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(FlashingVisibility)));
+			}
+		}
+		public System.Windows.Visibility MainVisibility
+		{
+			get { return !_isFlashing ? System.Windows.Visibility.Visible : System.Windows.Visibility.Hidden; }
+			set
+			{
+				PropertyChanging?.Invoke(this, new PropertyChangingEventArgs(nameof(MainVisibility)));
+				_isFlashing = value != System.Windows.Visibility.Visible;
+				PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(MainVisibility)));
+			}
+		}
+		public System.Windows.Visibility FlashButtonVisibility
+		{
+			get {
+				var path = Path.Combine(Path.GetDirectoryName(Assembly.GetEntryAssembly().Location), "firmware.zip");
+				return !_isFlashing && File.Exists(path) ? System.Windows.Visibility.Visible : System.Windows.Visibility.Hidden; 
+			}
+		}
+		public bool HasFirmware
+		{
+			get
+			{
+				return File.Exists(Path.Combine(Assembly.GetEntryAssembly().Location,"firmware.zip"));
 			}
 		}
 		public bool IsPersistent
@@ -77,6 +113,7 @@ namespace EspMon
 						if (_controller != null)
 						{
 							_controller.IsStarted = false;
+							_controller.Dispose();
 						}
 						var newCtl = new SvcController();
 						newCtl.PropertyChanging += NewCtl_PropertyChanging;
@@ -89,6 +126,7 @@ namespace EspMon
 						if (_controller is SvcController)
 						{
 							IsStarted = false;
+							_controller?.Dispose();
 						}
 						var task = Task.Run(() =>
 						{
@@ -100,6 +138,7 @@ namespace EspMon
 								UninstallComplete?.Invoke(state,EventArgs.Empty);
 							}, this);
 						});
+						
 						var newCtl = new HostedController();
 						newCtl.PropertyChanging += NewCtl_PropertyChanging;
 						newCtl.PropertyChanged += NewCtl_PropertyChanged;
@@ -111,7 +150,32 @@ namespace EspMon
 				}
 			}
 		}
-
+		public string OutputText
+		{
+			get
+			{
+				return outputBuffer.ToString();
+			}
+			set
+			{
+				PropertyChanging?.Invoke(this, new PropertyChangingEventArgs(nameof(OutputText)));
+				outputBuffer.Clear();
+				outputBuffer.Append(value);
+				PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(OutputText)));
+			}
+		}
+		public void ClearOutput()
+		{
+			PropertyChanging?.Invoke(this, new PropertyChangingEventArgs(nameof(OutputText)));
+			outputBuffer.Clear();
+			PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(OutputText)));
+		}
+		public void AppendOutputLine(string line)
+		{
+			PropertyChanging?.Invoke(this,new PropertyChangingEventArgs(nameof(OutputText)));
+			outputBuffer.AppendLine(line.TrimEnd());
+			PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(OutputText)));
+		}
 		private void NewCtl_PropertyChanged(object sender, PropertyChangedEventArgs e)
 		{
 			PropertyChanged?.Invoke(this, e);

@@ -34,3 +34,6 @@ C:\Users\gazto\Documents\PlatformIO\Projects\espmon3\EspMon\obj\Debug\EspMon.csp
 C:\Users\gazto\Documents\PlatformIO\Projects\espmon3\EspMon\obj\Debug\EspMon.csproj.Up2Date
 C:\Users\gazto\Documents\PlatformIO\Projects\espmon3\EspMon\obj\Debug\EspMon.exe
 C:\Users\gazto\Documents\PlatformIO\Projects\espmon3\EspMon\obj\Debug\EspMon.pdb
+C:\Users\gazto\Documents\PlatformIO\Projects\espmon3\EspMon\bin\Debug\firmware.zip
+C:\Users\gazto\Documents\PlatformIO\Projects\espmon3\EspMon\bin\Debug\esptool.exe
+C:\Users\gazto\Documents\PlatformIO\Projects\espmon3\EspMon\obj\Debug\EspMon_Content.g.cs

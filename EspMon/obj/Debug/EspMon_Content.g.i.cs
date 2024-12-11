@@ -8,6 +8,6 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-[assembly: System.Windows.Resources.AssemblyAssociatedContentFileAttribute("espmon.ico")]
+[assembly: System.Windows.Resources.AssemblyAssociatedContentFileAttribute("esptool.exe")]
 
 

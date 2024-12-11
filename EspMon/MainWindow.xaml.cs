@@ -1,7 +1,7 @@
 ﻿using Microsoft.Win32;
 
 using OpenHardwareMonitor.Hardware;
-
+using Path = System.IO.Path;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -16,7 +16,12 @@ using System.ServiceProcess;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
-
+using System.IO.Compression;
+using System.Diagnostics;
+using System.Windows.Input;
+using System.Text;
+using System.Windows.Shapes;
+using System.Windows.Threading;
 
 namespace EspMon
 {
@@ -27,6 +32,7 @@ namespace EspMon
 	/// </summary>
 	public partial class MainWindow : Window
 	{
+		internal const int UploadBaud = 115200 * 4;
 		AppActivator _appActivator;
 		private System.Windows.Forms.ContextMenu NotifyContextMenu;
 		private System.Windows.Forms.MenuItem NotifyContextMenuStarted;
@@ -176,5 +182,142 @@ namespace EspMon
 		{
 			ActivateApp();
 		}
-    }
+
+		private void flashDevice_Click(object sender, RoutedEventArgs e)
+		{
+			_ViewModel.IsStarted = false;
+			RefreshFlashingComPorts();
+			RefreshFlashingDevices();
+			_ViewModel.MainVisibility = Visibility.Hidden;
+			_ViewModel.FlashingVisibility = Visibility.Visible;
+		}
+
+		private void back_Click(object sender, RoutedEventArgs e)
+		{
+			_ViewModel.MainVisibility = Visibility.Visible;
+			_ViewModel.FlashingVisibility = Visibility.Hidden;
+		}
+		void RefreshFlashingComPorts()
+		{
+			int si = comPortCombo.SelectedIndex;
+			if (si == -1) { si = 0; }
+			comPortCombo.Items.Clear();
+			foreach (var port in SerialPort.GetPortNames())
+			{
+				comPortCombo.Items.Add(port);
+			}
+			if (comPortCombo.Items.Count > si)
+			{
+				comPortCombo.SelectedIndex = si;
+			}
+			else if (comPortCombo.Items.Count > 0)
+			{
+				comPortCombo.SelectedIndex = 0;
+			}
+		}
+		void RefreshFlashingDevices()
+		{
+			var path = Path.Combine(Path.GetDirectoryName(Assembly.GetEntryAssembly().Location), "firmware.zip");
+			int si = deviceCombo.SelectedIndex;
+			if (si == -1) { si = 0; }
+			deviceCombo.Items.Clear();
+			try
+			{
+				var items = new List<string>();
+				using (var file = ZipFile.OpenRead(path))
+				{
+					foreach (var entry in file.Entries)
+					{
+						items.Add(Path.GetFileNameWithoutExtension(entry.FullName));
+					}
+				}
+				items.Sort();
+				foreach(var item in items)
+				{
+					deviceCombo.Items.Add(item);
+				}
+			}
+			catch
+			{
+
+			}
+			if (deviceCombo.Items.Count > si)
+			{
+				deviceCombo.SelectedIndex = si;
+			}
+			else if (deviceCombo.Items.Count > 0)
+			{
+				deviceCombo.SelectedIndex = 0;
+			}
+		}
+		private void refreshComPortCombo_Click(object sender, RoutedEventArgs e)
+		{
+			RefreshFlashingComPorts();
+			
+		}
+		private static void DoEvents()
+		{
+			Application.Current.Dispatcher.Invoke(DispatcherPriority.Background,
+												  new Action(delegate { }));
+		}
+		private void flashDeviceButton_Click(object sender, RoutedEventArgs e)
+		{
+			var path = Path.Combine(Path.GetDirectoryName(Assembly.GetEntryAssembly().Location), "firmware.zip");
+			var path2 = Path.Combine(Path.GetDirectoryName(path), "firmware.bin");
+			using (var file = ZipFile.OpenRead(path))
+			{
+				foreach (var entry in file.Entries)
+				{
+					if (entry.Name == deviceCombo.Text + ".bin")
+					{
+						
+						try
+						{
+							File.Delete(path2);
+						}
+						catch { }
+						entry.ExtractToFile(path2);
+					}
+				}
+			}
+			path = Path.Combine(Path.GetDirectoryName(Assembly.GetEntryAssembly().Location), "esptool.exe");
+			var sb = new StringBuilder();
+			sb.Append("--baud " + UploadBaud.ToString());
+			sb.Append(" --port " + comPortCombo.Text);
+			sb.Append(" write_flash 0x10000 firmware.bin");
+			var psi = new ProcessStartInfo(path, sb.ToString())
+			{
+				CreateNoWindow = true,
+				UseShellExecute = false,
+				RedirectStandardOutput = true,
+				RedirectStandardError = true,
+				RedirectStandardInput = false
+			};
+			using (var proc = Process.Start(psi))
+			{
+				if (proc == null)
+				{
+					throw new IOException(
+						"Error burning firmware");
+				}
+				while (!proc.StandardOutput.EndOfStream)
+				{
+					var line = proc.StandardOutput.ReadLine();
+					if (line != null)
+					{
+						System.Diagnostics.Debug.WriteLine(line);
+						_ViewModel.AppendOutputLine(line);
+						output.ScrollToEnd();
+						DoEvents();
+					}
+				}
+				proc.WaitForExit();
+				try
+				{
+					File.Delete(path2);
+				}
+				catch { }
+			}
+		}
+	}
 }
