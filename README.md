@@ -8,6 +8,8 @@ You need supported hardware flashed with the firmware, and then you need to run 
 
 You may click "Persistent" to install as a system service. This can take several seconds to install/uninstall. If you do this your settings will be persisted past your login and past the life of the application.
 
+Clicking "Flash Device >" gives you the option to flash the firmware to any connected supported device.
+
 Current device support (other ESP32 based devices can easily be added by editing lcd_config.h and platformio.ini):
 
 - Lilygo TTGO T1 Display
