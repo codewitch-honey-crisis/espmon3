@@ -17,9 +17,9 @@ const char* TAG = "Serial";
 bool serial_read_packet(response_t* out_resp) {
 #ifdef ARDUINO
     int i = SER.read();
-    if(i!=EOF) {
+    if(-1<i) {
         if(i==1) {
-            return 0!=SER.readBytes((uint8_t*)out_resp,sizeof(out_resp));
+            return 0!=SER.readBytes((uint8_t*)out_resp,sizeof(response_t));
         } else {
             while(SER.available()) {
                 SER.read();
@@ -40,10 +40,10 @@ bool serial_read_packet(response_t* out_resp) {
 #endif
 }
 void serial_write() {
-#ifdef ARDUINO
-    SER.write((uint8_t)1);
-#else
     char c = 1;
+#ifdef ARDUINO
+    SER.write(&c,1);
+#else
     uart_write_bytes(UART_NUM_0,&c,1);
 #endif
 }
