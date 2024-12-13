@@ -58,7 +58,7 @@ static uix::display disp;
 #ifdef M5STACK_CORE2
 static m5core2_power power(esp_i2c<1,21,22>::instance);
 #endif
-#ifndef LCD_PIN_NUM_HSYNC
+#ifdef LCD_DMA
 // indicates the LCD DMA transfer is complete
 static bool lcd_flush_ready(esp_lcd_panel_io_handle_t panel_io,
                             esp_lcd_panel_io_event_data_t *edata,
@@ -73,7 +73,7 @@ static void uix_on_flush(const rect16& bounds,
     // adjust end coordinates for a quirk of Espressif's API (add 1 to each)
     lcd_panel_draw_bitmap(bounds.x1, bounds.y1, bounds.x2, bounds.y2,
                               (void *)bitmap);
-#ifdef LCD_PIN_NUM_HSYNC
+#ifndef LCD_DMA 
     disp.flush_complete();
 #endif
 }
@@ -614,7 +614,7 @@ extern "C" void app_main() {
     power.power_led_enable(false);
 #endif
     lcd_buffers_init();
-#ifdef LCD_PIN_NUM_HSYNC
+#ifndef LCD_DMA
     lcd_panel_init();
 #else
     lcd_panel_init(lcd_transfer_buffer_size,lcd_flush_ready);
