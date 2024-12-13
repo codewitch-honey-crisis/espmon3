@@ -24,3 +24,17 @@ Current device support (other ESP32 based devices can easily be added by editing
 - Waveshare ESP32S3 4.3inch
 
 ** presently display artifacts due to lcd_config.h settings issues
+
+## Instructions for adding more devices
+
+1. Edit `include/lcd_config.h` to add an entry with your display's specific settings and wiring. Use one of the existing devices as a template, and then change the `#define`name from the original (like `M5STACK_CORE2` to your own name)
+
+2. Edit the `platformio.ini` to add an entry for your device. Make sure to add your new `#define` name for the lcd settings to your `build_flags` entry. Use one of the existing entries as a template.
+
+3. Build the project
+
+4. Optionally edit the `copyfw.cmd` batch file to add an entry for copying firmware bin out to a friendly name in the root project directory. Use existing lines as a template.
+
+5. Take the `firmware.bin`, renamed to a friendly name, and add it to `EspMon/firmware.zip`
+
+This will add the code to support your display as well as add it to the list of flashable devices in the application.
