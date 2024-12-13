@@ -316,6 +316,7 @@ namespace EspMon
 			var psi = new ProcessStartInfo(path, sb.ToString())
 			{
 				CreateNoWindow = true,
+				WorkingDirectory = Path.GetDirectoryName(path),
 				UseShellExecute = false,
 				RedirectStandardOutput = true,
 				RedirectStandardError = true,
