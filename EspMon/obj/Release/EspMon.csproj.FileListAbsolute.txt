@@ -32,7 +32,6 @@ C:\Users\gazto\Documents\PlatformIO\Projects\espmon3\EspMon\obj\Release\EspMon.c
 C:\Users\gazto\Documents\PlatformIO\Projects\espmon3\EspMon\obj\Release\EspMon.csproj.Up2Date
 C:\Users\gazto\Documents\PlatformIO\Projects\espmon3\EspMon\obj\Release\EspMon.exe
 C:\Users\gazto\Documents\PlatformIO\Projects\espmon3\EspMon\obj\Release\EspMon.pdb
-C:\Users\gazto\Documents\PlatformIO\Projects\espmon3\EspMon\bin\Release\esptool.exe
 C:\Users\gazto\Documents\PlatformIO\Projects\espmon3\EspMon\bin\Release\firmware.zip
 C:\Users\gazto\Documents\PlatformIO\Projects\espmon3\EspMon\obj\Release\EspMon_Content.g.cs
 C:\Users\gazto\Documents\PlatformIO\Projects\espmon3\EspMon\bin\Release\esplink.exe

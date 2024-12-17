@@ -373,6 +373,11 @@ namespace EspMon
 			}
 
 		}
+
+		private void output_TextChanged(object sender, TextChangedEventArgs e)
+		{
+			output.ScrollToEnd();
+        }
 #else
 		private void flashDeviceButton_Click(object sender, RoutedEventArgs e)
 		{
@@ -470,5 +475,5 @@ namespace EspMon
 
 		}
 #endif
-	}
+    }
 }

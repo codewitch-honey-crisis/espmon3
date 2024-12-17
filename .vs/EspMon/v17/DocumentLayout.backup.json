@@ -3,8 +3,37 @@
   "WorkspaceRootPath": "C:\\Users\\gazto\\Documents\\PlatformIO\\Projects\\espmon3\\",
   "Documents": [
     {
+      "AbsoluteMoniker": "D:0:0:{EEC5B7D4-C4EE-4928-B6DE-D6F6DEB8D187}|EspMon\\EspMon.csproj|C:\\Users\\gazto\\Documents\\PlatformIO\\Projects\\espmon3\\espmon\\mainwindow.xaml.cs||{8B382828-6202-11D1-8870-0000F87579D2}|",
+      "RelativeMoniker": "D:0:0:{EEC5B7D4-C4EE-4928-B6DE-D6F6DEB8D187}|EspMon\\EspMon.csproj|solutionrelative:espmon\\mainwindow.xaml.cs||{8B382828-6202-11D1-8870-0000F87579D2}|"
+    },
+    {
       "AbsoluteMoniker": "D:0:0:{EEC5B7D4-C4EE-4928-B6DE-D6F6DEB8D187}|EspMon\\EspMon.csproj|C:\\Users\\gazto\\Documents\\PlatformIO\\Projects\\espmon3\\espmon\\mainwindow.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}",
       "RelativeMoniker": "D:0:0:{EEC5B7D4-C4EE-4928-B6DE-D6F6DEB8D187}|EspMon\\EspMon.csproj|solutionrelative:espmon\\mainwindow.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{EEC5B7D4-C4EE-4928-B6DE-D6F6DEB8D187}|EspMon\\EspMon.csproj|C:\\Users\\gazto\\Documents\\PlatformIO\\Projects\\espmon3\\espmon\\viewmodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{EEC5B7D4-C4EE-4928-B6DE-D6F6DEB8D187}|EspMon\\EspMon.csproj|solutionrelative:espmon\\viewmodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{94717D63-9ADA-4360-B0F9-0DEDCD503C42}|..\\..\\..\\..\\source\\repos\\EspMon\\EspLink\\EspLink.csproj|c:\\users\\gazto\\source\\repos\\espmon\\esplink\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{94717D63-9ADA-4360-B0F9-0DEDCD503C42}|..\\..\\..\\..\\source\\repos\\EspMon\\EspLink\\EspLink.csproj|c:\\users\\gazto\\source\\repos\\espmon\\esplink\\esplink.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{94717D63-9ADA-4360-B0F9-0DEDCD503C42}|..\\..\\..\\..\\source\\repos\\EspMon\\EspLink\\EspLink.csproj|c:\\users\\gazto\\source\\repos\\espmon\\esplink\\esplink.serialport.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{94717D63-9ADA-4360-B0F9-0DEDCD503C42}|..\\..\\..\\..\\source\\repos\\EspMon\\EspLink\\EspLink.csproj|c:\\users\\gazto\\source\\repos\\espmon\\esplink\\esplink.stub.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{94717D63-9ADA-4360-B0F9-0DEDCD503C42}|..\\..\\..\\..\\source\\repos\\EspMon\\EspLink\\EspLink.csproj|c:\\users\\gazto\\source\\repos\\espmon\\esplink\\esplink.trace.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{94717D63-9ADA-4360-B0F9-0DEDCD503C42}|..\\..\\..\\..\\source\\repos\\EspMon\\EspLink\\EspLink.csproj|c:\\users\\gazto\\source\\repos\\espmon\\esplink\\json\\jsonelement.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{94717D63-9ADA-4360-B0F9-0DEDCD503C42}|..\\..\\..\\..\\source\\repos\\EspMon\\EspLink\\EspLink.csproj|c:\\users\\gazto\\source\\repos\\espmon\\esplink\\json\\jsonrunners.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{EEC5B7D4-C4EE-4928-B6DE-D6F6DEB8D187}|EspMon\\EspMon.csproj|C:\\Users\\gazto\\Documents\\PlatformIO\\Projects\\espmon3\\espmon\\appactivator.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
@@ -12,13 +41,6 @@
     },
     {
       "AbsoluteMoniker": "D:0:0:{00000000-0000-0000-0000-000000000000}|\u003CSolution\u003E|EspLink||{04B8AB82-A572-4FEF-95CE-5222444B6B64}|"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{94717D63-9ADA-4360-B0F9-0DEDCD503C42}|..\\..\\..\\..\\source\\repos\\EspMon\\EspLink\\EspLink.csproj|c:\\users\\gazto\\source\\repos\\espmon\\esplink\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{EEC5B7D4-C4EE-4928-B6DE-D6F6DEB8D187}|EspMon\\EspMon.csproj|C:\\Users\\gazto\\Documents\\PlatformIO\\Projects\\espmon3\\espmon\\mainwindow.xaml.cs||{8B382828-6202-11D1-8870-0000F87579D2}|",
-      "RelativeMoniker": "D:0:0:{EEC5B7D4-C4EE-4928-B6DE-D6F6DEB8D187}|EspMon\\EspMon.csproj|solutionrelative:espmon\\mainwindow.xaml.cs||{8B382828-6202-11D1-8870-0000F87579D2}|"
     },
     {
       "AbsoluteMoniker": "D:0:0:{94717D63-9ADA-4360-B0F9-0DEDCD503C42}|..\\..\\..\\..\\source\\repos\\EspMon\\EspLink\\EspLink.csproj|c:\\users\\gazto\\source\\repos\\espmon\\esplink\\esplink.flash.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
@@ -30,10 +52,6 @@
     {
       "AbsoluteMoniker": "D:0:0:{EEC5B7D4-C4EE-4928-B6DE-D6F6DEB8D187}|EspMon\\EspMon.csproj|C:\\Users\\gazto\\Documents\\PlatformIO\\Projects\\espmon3\\espmon\\portdispatcher.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{EEC5B7D4-C4EE-4928-B6DE-D6F6DEB8D187}|EspMon\\EspMon.csproj|solutionrelative:espmon\\portdispatcher.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{EEC5B7D4-C4EE-4928-B6DE-D6F6DEB8D187}|EspMon\\EspMon.csproj|C:\\Users\\gazto\\Documents\\PlatformIO\\Projects\\espmon3\\espmon\\viewmodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{EEC5B7D4-C4EE-4928-B6DE-D6F6DEB8D187}|EspMon\\EspMon.csproj|solutionrelative:espmon\\viewmodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{EEC5B7D4-C4EE-4928-B6DE-D6F6DEB8D187}|EspMon\\EspMon.csproj|C:\\Users\\gazto\\Documents\\PlatformIO\\Projects\\espmon3\\espmon\\controller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
@@ -62,9 +80,6 @@
     {
       "AbsoluteMoniker": "D:0:0:{EEC5B7D4-C4EE-4928-B6DE-D6F6DEB8D187}|EspMon\\EspMon.csproj|C:\\Users\\gazto\\Documents\\PlatformIO\\Projects\\espmon3\\espmon\\messagingsynchronizationcontext.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{EEC5B7D4-C4EE-4928-B6DE-D6F6DEB8D187}|EspMon\\EspMon.csproj|solutionrelative:espmon\\messagingsynchronizationcontext.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{94717D63-9ADA-4360-B0F9-0DEDCD503C42}|..\\..\\..\\..\\source\\repos\\EspMon\\EspLink\\EspLink.csproj|c:\\users\\gazto\\source\\repos\\espmon\\esplink\\||{B270807C-D8C6-49EB-8EBE-8E8D566637A1}|1e78f8db-6c07-4d61-a18f-7514010abd56"
     }
   ],
   "DocumentGroupContainers": [
@@ -74,7 +89,7 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 11,
+          "SelectedChildIndex": 16,
           "Children": [
             {
               "$type": "Bookmark",
@@ -102,67 +117,79 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 2,
-              "Title": "EspLink",
-              "DocumentMoniker": "C:\\Users\\gazto\\source\\repos\\EspMon\\EspLink\\EspLink.csproj",
-              "RelativeDocumentMoniker": "..\\..\\..\\..\\source\\repos\\EspMon\\EspLink\\EspLink.csproj",
-              "ToolTip": "C:\\Users\\gazto\\source\\repos\\EspMon\\EspLink\\EspLink.csproj",
-              "RelativeToolTip": "..\\..\\..\\..\\source\\repos\\EspMon\\EspLink\\EspLink.csproj",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001001|",
-              "WhenOpened": "2024-12-17T17:17:18.43Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 3,
-              "Title": "Program.cs",
-              "DocumentMoniker": "C:\\Users\\gazto\\source\\repos\\EspMon\\EspLink\\Program.cs",
-              "RelativeDocumentMoniker": "..\\..\\..\\..\\source\\repos\\EspMon\\EspLink\\Program.cs",
-              "ToolTip": "C:\\Users\\gazto\\source\\repos\\EspMon\\EspLink\\Program.cs",
-              "RelativeToolTip": "..\\..\\..\\..\\source\\repos\\EspMon\\EspLink\\Program.cs",
-              "ViewState": "AgIAAAwAAAAAAAAAAAAAwEYAAAAEAAAAAAAAAA==",
+              "DocumentIndex": 4,
+              "Title": "EspLink.cs",
+              "DocumentMoniker": "C:\\Users\\gazto\\source\\repos\\EspMon\\EspLink\\EspLink.cs",
+              "RelativeDocumentMoniker": "..\\..\\..\\..\\source\\repos\\EspMon\\EspLink\\EspLink.cs",
+              "ToolTip": "C:\\Users\\gazto\\source\\repos\\EspMon\\EspLink\\EspLink.cs",
+              "RelativeToolTip": "..\\..\\..\\..\\source\\repos\\EspMon\\EspLink\\EspLink.cs",
+              "ViewState": "AgIAAIoAAAAAAAAAAAAuwLcAAABWAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-12-17T16:59:32.38Z"
+              "WhenOpened": "2024-12-17T22:00:37.381Z"
             },
             {
               "$type": "Document",
               "DocumentIndex": 5,
-              "Title": "EspLink.Flash.cs",
-              "DocumentMoniker": "C:\\Users\\gazto\\source\\repos\\EspMon\\EspLink\\EspLink.Flash.cs",
-              "RelativeDocumentMoniker": "..\\..\\..\\..\\source\\repos\\EspMon\\EspLink\\EspLink.Flash.cs",
-              "ToolTip": "C:\\Users\\gazto\\source\\repos\\EspMon\\EspLink\\EspLink.Flash.cs",
-              "RelativeToolTip": "..\\..\\..\\..\\source\\repos\\EspMon\\EspLink\\EspLink.Flash.cs",
-              "ViewState": "AgIAAAwAAAAAAAAAAAAAABwAAAA6AAAAAAAAAA==",
+              "Title": "EspLink.SerialPort.cs",
+              "DocumentMoniker": "C:\\Users\\gazto\\source\\repos\\EspMon\\EspLink\\EspLink.SerialPort.cs",
+              "RelativeDocumentMoniker": "..\\..\\..\\..\\source\\repos\\EspMon\\EspLink\\EspLink.SerialPort.cs",
+              "ToolTip": "C:\\Users\\gazto\\source\\repos\\EspMon\\EspLink\\EspLink.SerialPort.cs",
+              "RelativeToolTip": "..\\..\\..\\..\\source\\repos\\EspMon\\EspLink\\EspLink.SerialPort.cs",
+              "ViewState": "AgIAAA0AAAAAAAAAAAAlwFkAAAA/AAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-12-17T17:07:13.725Z"
+              "WhenOpened": "2024-12-17T21:57:44.82Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 4,
-              "Title": "MainWindow.xaml.cs",
-              "DocumentMoniker": "C:\\Users\\gazto\\Documents\\PlatformIO\\Projects\\espmon3\\EspMon\\MainWindow.xaml.cs",
-              "RelativeDocumentMoniker": "EspMon\\MainWindow.xaml.cs",
-              "ToolTip": "C:\\Users\\gazto\\Documents\\PlatformIO\\Projects\\espmon3\\EspMon\\MainWindow.xaml.cs",
-              "RelativeToolTip": "EspMon\\MainWindow.xaml.cs",
-              "ViewState": "AgIAACoBAAAAAAAAAAAQwE4BAAAqAAAAAAAAAA==",
+              "DocumentIndex": 7,
+              "Title": "EspLink.Trace.cs",
+              "DocumentMoniker": "C:\\Users\\gazto\\source\\repos\\EspMon\\EspLink\\EspLink.Trace.cs",
+              "RelativeDocumentMoniker": "..\\..\\..\\..\\source\\repos\\EspMon\\EspLink\\EspLink.Trace.cs",
+              "ToolTip": "C:\\Users\\gazto\\source\\repos\\EspMon\\EspLink\\EspLink.Trace.cs",
+              "RelativeToolTip": "..\\..\\..\\..\\source\\repos\\EspMon\\EspLink\\EspLink.Trace.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-12-08T03:34:00.22Z"
+              "WhenOpened": "2024-12-17T21:09:57.098Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 6,
+              "Title": "EspLink.Stub.cs",
+              "DocumentMoniker": "C:\\Users\\gazto\\source\\repos\\EspMon\\EspLink\\EspLink.Stub.cs",
+              "RelativeDocumentMoniker": "..\\..\\..\\..\\source\\repos\\EspMon\\EspLink\\EspLink.Stub.cs",
+              "ToolTip": "C:\\Users\\gazto\\source\\repos\\EspMon\\EspLink\\EspLink.Stub.cs",
+              "RelativeToolTip": "..\\..\\..\\..\\source\\repos\\EspMon\\EspLink\\EspLink.Stub.cs",
+              "ViewState": "AgIAAB0AAAAAAAAAAAAuwD0AAAA/AAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-12-17T21:06:53.316Z"
             },
             {
               "$type": "Document",
               "DocumentIndex": 8,
-              "Title": "ViewModel.cs",
-              "DocumentMoniker": "C:\\Users\\gazto\\Documents\\PlatformIO\\Projects\\espmon3\\EspMon\\ViewModel.cs",
-              "RelativeDocumentMoniker": "EspMon\\ViewModel.cs",
-              "ToolTip": "C:\\Users\\gazto\\Documents\\PlatformIO\\Projects\\espmon3\\EspMon\\ViewModel.cs",
-              "RelativeToolTip": "EspMon\\ViewModel.cs",
-              "ViewState": "AgIAAJwAAAAAAAAAAAAvwM8AAAAeAAAAAAAAAA==",
+              "Title": "JsonElement.cs",
+              "DocumentMoniker": "C:\\Users\\gazto\\source\\repos\\EspMon\\EspLink\\Json\\JsonElement.cs",
+              "RelativeDocumentMoniker": "..\\..\\..\\..\\source\\repos\\EspMon\\EspLink\\Json\\JsonElement.cs",
+              "ToolTip": "C:\\Users\\gazto\\source\\repos\\EspMon\\EspLink\\Json\\JsonElement.cs",
+              "RelativeToolTip": "..\\..\\..\\..\\source\\repos\\EspMon\\EspLink\\Json\\JsonElement.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-12-08T02:46:44.014Z"
+              "WhenOpened": "2024-12-17T21:06:41.037Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 0,
+              "DocumentIndex": 9,
+              "Title": "JsonRunners.cs",
+              "DocumentMoniker": "C:\\Users\\gazto\\source\\repos\\EspMon\\EspLink\\Json\\JsonRunners.cs",
+              "RelativeDocumentMoniker": "..\\..\\..\\..\\source\\repos\\EspMon\\EspLink\\Json\\JsonRunners.cs",
+              "ToolTip": "C:\\Users\\gazto\\source\\repos\\EspMon\\EspLink\\Json\\JsonRunners.cs",
+              "RelativeToolTip": "..\\..\\..\\..\\source\\repos\\EspMon\\EspLink\\Json\\JsonRunners.cs",
+              "ViewState": "AgIAAGYEAAAAAAAAAAAmwAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-12-17T21:04:57.526Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
               "Title": "MainWindow.xaml",
               "DocumentMoniker": "C:\\Users\\gazto\\Documents\\PlatformIO\\Projects\\espmon3\\EspMon\\MainWindow.xaml",
               "RelativeDocumentMoniker": "EspMon\\MainWindow.xaml",
@@ -174,7 +201,69 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 10,
+              "DocumentIndex": 11,
+              "Title": "EspLink",
+              "DocumentMoniker": "C:\\Users\\gazto\\source\\repos\\EspMon\\EspLink\\EspLink.csproj",
+              "RelativeDocumentMoniker": "..\\..\\..\\..\\source\\repos\\EspMon\\EspLink\\EspLink.csproj",
+              "ToolTip": "C:\\Users\\gazto\\source\\repos\\EspMon\\EspLink\\EspLink.csproj",
+              "RelativeToolTip": "..\\..\\..\\..\\source\\repos\\EspMon\\EspLink\\EspLink.csproj",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001001|",
+              "WhenOpened": "2024-12-17T17:17:18.43Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
+              "Title": "Program.cs",
+              "DocumentMoniker": "C:\\Users\\gazto\\source\\repos\\EspMon\\EspLink\\Program.cs",
+              "RelativeDocumentMoniker": "..\\..\\..\\..\\source\\repos\\EspMon\\EspLink\\Program.cs",
+              "ToolTip": "C:\\Users\\gazto\\source\\repos\\EspMon\\EspLink\\Program.cs",
+              "RelativeToolTip": "..\\..\\..\\..\\source\\repos\\EspMon\\EspLink\\Program.cs",
+              "ViewState": "AgIAABMAAAAAAAAAAAAIwDAAAAAsAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-12-17T16:59:32.38Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 12,
+              "Title": "EspLink.Flash.cs",
+              "DocumentMoniker": "C:\\Users\\gazto\\source\\repos\\EspMon\\EspLink\\EspLink.Flash.cs",
+              "RelativeDocumentMoniker": "..\\..\\..\\..\\source\\repos\\EspMon\\EspLink\\EspLink.Flash.cs",
+              "ToolTip": "C:\\Users\\gazto\\source\\repos\\EspMon\\EspLink\\EspLink.Flash.cs",
+              "RelativeToolTip": "..\\..\\..\\..\\source\\repos\\EspMon\\EspLink\\EspLink.Flash.cs",
+              "ViewState": "AgIAAAwAAAAAAAAAAAAAABwAAAA6AAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-12-17T17:07:13.725Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "MainWindow.xaml.cs",
+              "DocumentMoniker": "C:\\Users\\gazto\\Documents\\PlatformIO\\Projects\\espmon3\\EspMon\\MainWindow.xaml.cs",
+              "RelativeDocumentMoniker": "EspMon\\MainWindow.xaml.cs",
+              "ToolTip": "C:\\Users\\gazto\\Documents\\PlatformIO\\Projects\\espmon3\\EspMon\\MainWindow.xaml.cs",
+              "RelativeToolTip": "EspMon\\MainWindow.xaml.cs",
+              "ViewState": "AgIAAE0BAAAAAAAAAAAlwHoBAAAYAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-12-08T03:34:00.22Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "ViewModel.cs",
+              "DocumentMoniker": "C:\\Users\\gazto\\Documents\\PlatformIO\\Projects\\espmon3\\EspMon\\ViewModel.cs",
+              "RelativeDocumentMoniker": "EspMon\\ViewModel.cs",
+              "ToolTip": "C:\\Users\\gazto\\Documents\\PlatformIO\\Projects\\espmon3\\EspMon\\ViewModel.cs",
+              "RelativeToolTip": "EspMon\\ViewModel.cs",
+              "ViewState": "AgIAAOMAAAAAAAAAAAAWwCgBAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-12-08T02:46:44.014Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 16,
               "Title": "HostedController.cs",
               "DocumentMoniker": "C:\\Users\\gazto\\Documents\\PlatformIO\\Projects\\espmon3\\EspMon\\HostedController.cs",
               "RelativeDocumentMoniker": "EspMon\\HostedController.cs",
@@ -186,7 +275,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 11,
+              "DocumentIndex": 17,
               "Title": "SvcController.cs",
               "DocumentMoniker": "C:\\Users\\gazto\\Documents\\PlatformIO\\Projects\\espmon3\\EspMon\\SvcController.cs",
               "RelativeDocumentMoniker": "EspMon\\SvcController.cs",
@@ -198,7 +287,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 14,
+              "DocumentIndex": 20,
               "Title": "EspMonService.Designer.cs",
               "DocumentMoniker": "C:\\Users\\gazto\\Documents\\PlatformIO\\Projects\\espmon3\\EspMon\\EspMonService.Designer.cs",
               "RelativeDocumentMoniker": "EspMon\\EspMonService.Designer.cs",
@@ -210,7 +299,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 13,
+              "DocumentIndex": 19,
               "Title": "EspMonService.cs [Design]",
               "DocumentMoniker": "C:\\Users\\gazto\\Documents\\PlatformIO\\Projects\\espmon3\\EspMon\\EspMonService.cs",
               "RelativeDocumentMoniker": "EspMon\\EspMonService.cs",
@@ -221,7 +310,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 15,
+              "DocumentIndex": 21,
               "Title": "MessagingSynchronizationContext.cs",
               "DocumentMoniker": "C:\\Users\\gazto\\Documents\\PlatformIO\\Projects\\espmon3\\EspMon\\MessagingSynchronizationContext.cs",
               "RelativeDocumentMoniker": "EspMon\\MessagingSynchronizationContext.cs",
@@ -233,7 +322,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 12,
+              "DocumentIndex": 18,
               "Title": "EspMonService.cs",
               "DocumentMoniker": "C:\\Users\\gazto\\Documents\\PlatformIO\\Projects\\espmon3\\EspMon\\EspMonService.cs",
               "RelativeDocumentMoniker": "EspMon\\EspMonService.cs",
@@ -245,7 +334,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 6,
+              "DocumentIndex": 13,
               "Title": "App.cs",
               "DocumentMoniker": "C:\\Users\\gazto\\Documents\\PlatformIO\\Projects\\espmon3\\EspMon\\App.cs",
               "RelativeDocumentMoniker": "EspMon\\App.cs",
@@ -257,7 +346,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 7,
+              "DocumentIndex": 14,
               "Title": "PortDispatcher.cs",
               "DocumentMoniker": "C:\\Users\\gazto\\Documents\\PlatformIO\\Projects\\espmon3\\EspMon\\PortDispatcher.cs",
               "RelativeDocumentMoniker": "EspMon\\PortDispatcher.cs",
@@ -269,7 +358,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 9,
+              "DocumentIndex": 15,
               "Title": "Controller.cs",
               "DocumentMoniker": "C:\\Users\\gazto\\Documents\\PlatformIO\\Projects\\espmon3\\EspMon\\Controller.cs",
               "RelativeDocumentMoniker": "EspMon\\Controller.cs",
@@ -281,7 +370,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 1,
+              "DocumentIndex": 10,
               "Title": "AppActivator.cs",
               "DocumentMoniker": "C:\\Users\\gazto\\Documents\\PlatformIO\\Projects\\espmon3\\EspMon\\AppActivator.cs",
               "RelativeDocumentMoniker": "EspMon\\AppActivator.cs",
@@ -289,8 +378,7 @@
               "RelativeToolTip": "EspMon\\AppActivator.cs",
               "ViewState": "AgIAAGgAAAAAAAAAAAAkwHMAAAAxAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-12-08T13:14:58.085Z",
-              "EditorCaption": ""
+              "WhenOpened": "2024-12-08T13:14:58.085Z"
             }
           ]
         }

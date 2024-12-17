@@ -294,6 +294,7 @@ namespace EspMon
 			GC.SuppressFinalize(this);
 		}
 	}
+
 	internal class PortItem : INotifyPropertyChanged
 	{
 		bool _isChecked;
