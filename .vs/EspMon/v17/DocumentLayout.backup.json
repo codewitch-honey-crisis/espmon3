@@ -89,7 +89,7 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 5,
+          "SelectedChildIndex": 6,
           "Children": [
             {
               "$type": "Bookmark",
@@ -112,6 +112,10 @@
               "Name": "ST:2:0:{34c7837f-3b3a-449c-bdf0-bdad86cbaf4a}"
             },
             {
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{1c4feeaa-4718-4aa9-859d-94ce25d182ba}"
+            },
+            {
               "$type": "Document",
               "DocumentIndex": 0,
               "Title": "Program.cs",
@@ -119,7 +123,7 @@
               "RelativeDocumentMoniker": "..\\..\\..\\..\\source\\repos\\EspMon\\EspLink\\Program.cs",
               "ToolTip": "C:\\Users\\gazto\\source\\repos\\EspMon\\EspLink\\Program.cs",
               "RelativeToolTip": "..\\..\\..\\..\\source\\repos\\EspMon\\EspLink\\Program.cs",
-              "ViewState": "AgIAADgAAAAAAAAAAAAuwGUAAAAkAAAAAAAAAA==",
+              "ViewState": "AgIAADgAAAAAAAAAAAAuwF0AAAAqAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2024-12-17T16:59:32.38Z",
               "EditorCaption": ""
