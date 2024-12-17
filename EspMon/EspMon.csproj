@@ -140,6 +140,10 @@
     <EmbeddedResource Include="espmon.ico" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="..\esplink.exe">
+      <Link>esplink.exe</Link>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="esptool.exe">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
