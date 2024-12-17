@@ -7,6 +7,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EspMon", "EspMon\EspMon.csp
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OpenHardwareMonitorLib", "openhardwaremonitor\OpenHardwareMonitorLib.csproj", "{B0397530-545A-471D-BB74-027AE456DF1A}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EspLink", "..\..\..\..\source\repos\EspMon\EspLink\EspLink.csproj", "{94717D63-9ADA-4360-B0F9-0DEDCD503C42}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +23,10 @@ Global
 		{B0397530-545A-471D-BB74-027AE456DF1A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B0397530-545A-471D-BB74-027AE456DF1A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B0397530-545A-471D-BB74-027AE456DF1A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{94717D63-9ADA-4360-B0F9-0DEDCD503C42}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{94717D63-9ADA-4360-B0F9-0DEDCD503C42}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{94717D63-9ADA-4360-B0F9-0DEDCD503C42}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{94717D63-9ADA-4360-B0F9-0DEDCD503C42}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

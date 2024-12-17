@@ -127,6 +127,10 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\..\..\..\source\repos\EspMon\EspLink\EspLink.csproj">
+      <Project>{94717d63-9ada-4360-b0f9-0dedcd503c42}</Project>
+      <Name>EspLink</Name>
+    </ProjectReference>
     <ProjectReference Include="..\openhardwaremonitor\OpenHardwareMonitorLib.csproj">
       <Project>{b0397530-545a-471d-bb74-027ae456df1a}</Project>
       <Name>OpenHardwareMonitorLib</Name>

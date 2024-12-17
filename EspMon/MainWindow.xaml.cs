@@ -22,6 +22,8 @@ using System.Windows.Input;
 using System.Text;
 using System.Windows.Shapes;
 using System.Windows.Threading;
+using System.Windows.Controls;
+using EL;
 
 namespace EspMon
 {
@@ -279,6 +281,99 @@ namespace EspMon
 			Application.Current.Dispatcher.Invoke(DispatcherPriority.Background,
 												  new Action(delegate { }));
 		}
+#if !USE_ESPTOOL
+		private void flashDeviceButton_Click(object sender, RoutedEventArgs e)
+		{
+			var startPending = false;
+			if (_ViewModel.IsStarted)
+			{
+				startPending = true;
+				_ViewModel.IsStarted = false;
+			}
+			var path = Path.Combine(Path.GetDirectoryName(Assembly.GetEntryAssembly().Location), "firmware.zip");
+			var path2 = Path.Combine(Path.GetDirectoryName(path), "firmware.bin");
+			_ViewModel.FlashProgress = 1;
+			_ViewModel.IsIdle = false;
+			DoEvents();
+			using (var file = ZipFile.OpenRead(path))
+			{
+				foreach (var entry in file.Entries)
+				{
+					if (entry.Name == deviceCombo.Text + ".bin")
+					{
+
+						try
+						{
+							File.Delete(path2);
+						}
+						catch { }
+						entry.ExtractToFile(path2);
+					}
+				}
+			}
+			path = Path.Combine(Path.GetDirectoryName(Assembly.GetEntryAssembly().Location), "esplink.exe");
+			var sb = new StringBuilder();
+			sb.Append(comPortCombo.Text);
+			sb.Append(" firmware.bin");
+			var psi = new ProcessStartInfo(path, sb.ToString())
+			{
+				CreateNoWindow = true,
+				WorkingDirectory = Path.GetDirectoryName(path),
+				UseShellExecute = false,
+				RedirectStandardOutput = true,
+				RedirectStandardError = true,
+				RedirectStandardInput = false
+			};
+			using (var proc = Process.Start(psi))
+			{
+				if (proc == null)
+				{
+					throw new IOException(
+						"Error burning firmware");
+				}
+				var isprog = false;
+				while (!proc.StandardOutput.EndOfStream)
+				{
+					var line = proc.StandardOutput.ReadLine();
+					if (line != null)
+					{
+						_ViewModel.AppendOutput(line,true);
+						if (line.EndsWith("%"))
+						{
+							var num = line.Substring(0, line.Length-1);
+							int i;
+							if (int.TryParse(num, out i))
+							{
+								isprog = true;
+								_ViewModel.FlashProgress = i;
+							}
+						}
+						else if (isprog)
+						{
+							_ViewModel.FlashProgress = 100;
+						}
+						output.ScrollToEnd();
+						DoEvents();
+					}
+				}
+				proc.WaitForExit();
+
+				try
+				{
+					File.Delete(path2);
+				}
+				catch { }
+				_ViewModel.FlashProgress = 0;
+				_ViewModel.IsIdle = true;
+				DoEvents();
+			}
+			if (startPending)
+			{
+				_ViewModel.IsStarted = true;
+			}
+
+		}
+#else
 		private void flashDeviceButton_Click(object sender, RoutedEventArgs e)
 		{
 			var startPending = false;
@@ -374,5 +469,6 @@ namespace EspMon
 			}
 
 		}
+#endif
 	}
 }

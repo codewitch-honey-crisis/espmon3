@@ -197,10 +197,16 @@ namespace EspMon
 			outputBuffer.Clear();
 			PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(OutputText)));
 		}
-		public void AppendOutputLine(string line)
+		public void AppendOutput(string text, bool line = true)
 		{
 			PropertyChanging?.Invoke(this,new PropertyChangingEventArgs(nameof(OutputText)));
-			outputBuffer.AppendLine(line.TrimEnd());
+			if (line)
+			{
+				outputBuffer.AppendLine(text.TrimEnd());
+			} else
+			{
+				outputBuffer.Append(text);
+			}
 			PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(OutputText)));
 		}
 		private void NewCtl_PropertyChanged(object sender, PropertyChangedEventArgs e)
