@@ -25,7 +25,11 @@ Current device support (other ESP32 based devices can easily be added by editing
 
 ** presently display artifacts due to lcd_config.h settings issues
 
-## Instructions for adding more devices
+### Graph axis explanation
+
+The displayed graph is vertically 1 horizontal line for every 10%, and horizontally one vertical line for every 5 seconds.
+
+### Instructions for adding more devices
 
 1. Edit `include/lcd_config.h` to add an entry with your display's specific settings and wiring. Use one of the existing devices as a template, and then change the `#define`name from the original (like `M5STACK_CORE2` to your own name)
 
@@ -38,3 +42,8 @@ Current device support (other ESP32 based devices can easily be added by editing
 5. Take the `firmware.bin`, renamed to a friendly name, and add it to `EspMon/firmware.zip`
 
 This will add the code to support your display as well as add it to the list of flashable devices in the application.
+
+### Serial protocol
+
+The serial protocol is very simple. Ten times a second, the device sends 1 byte across the wire with a value of `0x01`. When it's received the host sends 7 bytes, starting with 0x01, and then values as indicated in `include/serial.hpp`'s `response_t` structure. Those values are used to update the display. If the device does not receive a response from the host for 1 second, it displays [ DISCONNECTED ] until it gets a signal again.
+
