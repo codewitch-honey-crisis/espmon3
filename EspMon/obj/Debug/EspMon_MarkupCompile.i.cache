@@ -8,12 +8,12 @@ C:\Users\gazto\Documents\PlatformIO\Projects\espmon3\EspMon\obj\Debug\
 EspMon
 none
 false
-DEBUG;TRACE
+TRACE;DEBUG;USE_ESPLINK_OOP
 
 1219584333
-1446127450
+2-1903004490
 18-685009490
-21-1031065467
+21-176108201
 MainWindow.xaml;
 
 True

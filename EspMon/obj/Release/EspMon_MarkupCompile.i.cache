@@ -8,12 +8,12 @@ C:\Users\gazto\Documents\PlatformIO\Projects\espmon3\EspMon\obj\Release\
 EspMon
 none
 false
-TRACE
+TRACE;USE_ESPLINK_OOP
 
 1219584333
 2-1903004490
 181126037102
-20-1810053845
+211443053691
 MainWindow.xaml;
 
 True

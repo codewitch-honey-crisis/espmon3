@@ -24,10 +24,11 @@ using System.Windows.Shapes;
 using System.Windows.Threading;
 using System.Windows.Controls;
 using EL;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement.Rebar;
 
 namespace EspMon
 {
-	
+
 
 	/// <summary>
 	/// Interaction logic for MainWindow.xaml
@@ -45,7 +46,7 @@ namespace EspMon
 		public MainWindow()
 		{
 			InitializeComponent();
-			
+
 			this.Loaded += MainWindow_Loaded;
 			_ViewModel = new ViewModel();
 			DataContext = _ViewModel;
@@ -57,8 +58,8 @@ namespace EspMon
 					_notifyIcon.BalloonTipText = "Esp Mon has been minimised. Click the tray icon to show.";
 					_notifyIcon.BalloonTipTitle = "Esp Mon";
 					_notifyIcon.Text = "Esp Mon";
-					_notifyIcon.Click += new EventHandler(_notifyIcon_Click);					_notifyIcon.Icon = new System.Drawing.Icon(stm);
-					_notifyIcon.Visible = true;	
+					_notifyIcon.Click += new EventHandler(_notifyIcon_Click); _notifyIcon.Icon = new System.Drawing.Icon(stm);
+					_notifyIcon.Visible = true;
 				}
 			}
 			this.NotifyContextMenu = new System.Windows.Forms.ContextMenu();
@@ -95,14 +96,14 @@ namespace EspMon
 		private void _ViewModel_UninstallComplete(object sender, EventArgs e)
 		{
 			const bool enabled = true;
-			serviceInstalledButton.IsEnabled= enabled;
+			serviceInstalledButton.IsEnabled = enabled;
 			isStartedCheckbox.IsEnabled = enabled;
 			flashDevice.IsEnabled = enabled;
 			cpuTmax.IsEnabled = enabled;
 			gpuTmax.IsEnabled = enabled;
 			comPortsList.IsEnabled = enabled;
 			refreshComPortCombo.IsEnabled = enabled;
-			
+
 
 		}
 
@@ -121,7 +122,7 @@ namespace EspMon
 
 		private void _ViewModel_PropertyChanging(object sender, PropertyChangingEventArgs e)
 		{
-			if(e.PropertyName=="IsPersistent")
+			if (e.PropertyName == "IsPersistent")
 			{
 				bool enabled = false;
 				serviceInstalledButton.IsEnabled = enabled;
@@ -152,7 +153,7 @@ namespace EspMon
 			this.NotifyContextMenuStarted.Checked = isStartedCheckbox.IsChecked.Value;
 		}
 
-		
+
 		private void NotifyContextMenuShow_Click(object sender, EventArgs e)
 		{
 			ActivateApp();
@@ -197,7 +198,7 @@ namespace EspMon
 			else
 				_storedWindowState = WindowState;
 		}
-		
+
 
 		void _notifyIcon_Click(object sender, EventArgs e)
 		{
@@ -206,7 +207,7 @@ namespace EspMon
 
 		private void flashDevice_Click(object sender, RoutedEventArgs e)
 		{
-			
+
 			RefreshFlashingComPorts();
 			RefreshFlashingDevices();
 			_ViewModel.MainVisibility = Visibility.Hidden;
@@ -253,7 +254,7 @@ namespace EspMon
 					}
 				}
 				items.Sort();
-				foreach(var item in items)
+				foreach (var item in items)
 				{
 					deviceCombo.Items.Add(item);
 				}
@@ -274,14 +275,135 @@ namespace EspMon
 		private void refreshComPortCombo_Click(object sender, RoutedEventArgs e)
 		{
 			RefreshFlashingComPorts();
-			
+
 		}
 		private static void DoEvents()
 		{
 			Application.Current.Dispatcher.Invoke(DispatcherPriority.Background,
 												  new Action(delegate { }));
 		}
-#if !USE_ESPTOOL
+		private void output_TextChanged(object sender, TextChangedEventArgs e)
+		{
+			output.ScrollToEnd();
+		}
+
+#if !USE_ESPLINK_OOP && !USE_ESPTOOL
+		// doesn't friggin flash for some reason
+		// losing serial events inproc
+		internal class EspProgress : IProgress<int>
+		{
+			ViewModel _model;
+			SynchronizationContext _sync;
+			int _old = -1;
+			public EspProgress(ViewModel viewModel, SynchronizationContext sync)
+			{
+				_model = viewModel;
+				_sync = sync;
+			}
+			public int Value { get; private set; }
+			public bool IsBounded
+			{
+				get
+				{
+					return Value >= 0;
+				}
+			}
+
+			public void Report(int value)
+			{
+				Value = value;
+				if (value != _old)
+				{
+					if (IsBounded)
+					{
+						_sync.Post((st) => _model.AppendOutput($"{value}%", true), null);
+					}
+					else
+					{
+						_sync.Post((st) => _model.AppendOutput(".", false), null);
+					}
+					_old = value;
+				}
+			}
+		}
+		private async void flashDeviceButton_Click(object sender, RoutedEventArgs e)
+		{
+			var startPending = false;
+			if (_ViewModel.IsStarted)
+			{
+				startPending = true;
+				_ViewModel.IsStarted = false;
+			}
+			var path = Path.Combine(Path.GetDirectoryName(Assembly.GetEntryAssembly().Location), "firmware.zip");
+			MemoryStream stm = null;
+			ZipArchive file = null;
+			_ViewModel.FlashProgress = 1;
+			_ViewModel.IsIdle = false;
+			DoEvents();
+			try
+			{
+				file = ZipFile.OpenRead(path);
+
+				foreach (var entry in file.Entries)
+				{
+					if (entry.Name == deviceCombo.Text + ".bin")
+					{
+						stm = new MemoryStream();
+						using (var stm2 = entry.Open())
+						{
+							await stm2.CopyToAsync(stm);
+						}
+						break;
+					}
+				}
+				if (stm == null)
+				{
+					throw new Exception("Unable to find archive entry");
+				}
+				var tf = new TaskFactory(TaskCreationOptions.PreferFairness, TaskContinuationOptions.PreferFairness);
+				var sync = SynchronizationContext.Current;
+				var portName = comPortCombo.Text;
+				await tf.StartNew(async () =>
+				{
+					using (var link = new EspLink(portName))
+					{
+						sync.Post((st) => _ViewModel.AppendOutput("Connecting...", false), null);
+						await link.ConnectAsync(true, 3, true, CancellationToken.None, link.DefaultTimeout, new EspProgress(_ViewModel, sync));
+						sync.Post((st) => _ViewModel.AppendOutput("done!", true), null);
+						sync.Post((st) => _ViewModel.AppendOutput("Running Stub...", true), null);
+						await link.RunStubAsync(CancellationToken.None, link.DefaultTimeout, new EspProgress(_ViewModel, sync));
+						sync.Post((st) => _ViewModel.AppendOutput("", true), null);
+						await link.SetBaudRateAsync(115200, 115200 * 4, CancellationToken.None, link.DefaultTimeout);
+						sync.Post((st) => _ViewModel.AppendOutput($"Changed baud rate to {link.BaudRate}", true), null);
+						sync.Post((st) => _ViewModel.AppendOutput($"Flashing to offset 0x10000... ", true), null);
+						await link.FlashAsync(CancellationToken.None, stm, 16 * 1024, 0x10000, 3, false, link.DefaultTimeout, new EspProgress(_ViewModel, sync));
+						sync.Post((st) => _ViewModel.AppendOutput("", true), null);
+						sync.Post((st) => _ViewModel.AppendOutput("Hard resetting", true), null);
+						link.Reset();
+						throw new Exception("The operation completed");
+					}
+				});
+				_ViewModel.FlashProgress = 0;
+				_ViewModel.IsIdle = true;
+				if (startPending)
+				{
+					_ViewModel.IsStarted = true;
+				}
+			}
+			finally
+			{
+				if (stm != null)
+				{
+					stm.Close();
+				}
+				if (file != null)
+				{
+					file.Dispose();
+				}
+			}
+		}
+#endif
+#if USE_ESPLINK_OOP
 		private void flashDeviceButton_Click(object sender, RoutedEventArgs e)
 		{
 			var startPending = false;
@@ -308,6 +430,7 @@ namespace EspMon
 						}
 						catch { }
 						entry.ExtractToFile(path2);
+						break;
 					}
 				}
 			}
@@ -373,12 +496,8 @@ namespace EspMon
 			}
 
 		}
-
-		private void output_TextChanged(object sender, TextChangedEventArgs e)
-		{
-			output.ScrollToEnd();
-        }
-#else
+#endif
+#if USE_ESPTOOL
 		private void flashDeviceButton_Click(object sender, RoutedEventArgs e)
 		{
 			var startPending = false;
@@ -405,6 +524,7 @@ namespace EspMon
 						}
 						catch { }
 						entry.ExtractToFile(path2);
+						break;
 					}
 				}
 			}
@@ -475,5 +595,5 @@ namespace EspMon
 
 		}
 #endif
-    }
+	}
 }
