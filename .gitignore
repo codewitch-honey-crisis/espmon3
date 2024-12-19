@@ -23,3 +23,13 @@ Makerfabs ESP Display S3 7 inch.bin
 Waveshare ESP32S3 4.3 inch.bin
 
 /.vs/EspMon/v17/.suo
+/EspMon/EspLink/EspLink.csproj
+/.vs/EspMon/v17/DocumentLayout.backup.json
+/.vs/EspMon/v17/DocumentLayout.json
+/EspMon/bin/Debug/EspMon.cfg
+/EspMon/bin/Release/EspMon.pdb
+/EspMon/obj/Debug/EspMon.exe
+/EspMon/obj/Debug/EspMon.pdb
+/EspMon/obj/Release/DesignTimeResolveAssemblyReferencesInput.cache
+/EspMon/obj/Release/EspMon.exe
+/EspMon/obj/Release/EspMon.pdb
