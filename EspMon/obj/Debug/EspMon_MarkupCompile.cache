@@ -8,7 +8,7 @@ C:\Users\gazto\Documents\PlatformIO\Projects\espmon3\EspMon\obj\Debug\
 EspMon
 none
 false
-DEBUG;TRACE
+TRACE;DEBUG;USE_ESPLINK_OOP
 
 1219584333
 2-1903004490
