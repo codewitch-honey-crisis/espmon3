@@ -360,6 +360,9 @@ namespace EspMon
 				{
 					throw new Exception("Unable to find archive entry");
 				}
+				var pkg = stm.ToArray();
+				stm.Close();
+				stm = null;
 				var tf = new TaskFactory(TaskCreationOptions.PreferFairness, TaskContinuationOptions.PreferFairness);
 				var sync = SynchronizationContext.Current;
 				var portName = comPortCombo.Text;
@@ -367,6 +370,7 @@ namespace EspMon
 				{
 					using (var link = new EspLink(portName))
 					{
+						link.SerialHandshake = Handshake.RequestToSendXOnXOff;
 						sync.Post((st) => _ViewModel.AppendOutput("Connecting...", false), null);
 						await link.ConnectAsync(true, 3, true, CancellationToken.None, link.DefaultTimeout, new EspProgress(_ViewModel, sync));
 						sync.Post((st) => _ViewModel.AppendOutput("done!", true), null);
@@ -376,11 +380,14 @@ namespace EspMon
 						await link.SetBaudRateAsync(115200, 115200 * 4, CancellationToken.None, link.DefaultTimeout);
 						sync.Post((st) => _ViewModel.AppendOutput($"Changed baud rate to {link.BaudRate}", true), null);
 						sync.Post((st) => _ViewModel.AppendOutput($"Flashing to offset 0x10000... ", true), null);
-						await link.FlashAsync(CancellationToken.None, stm, 16 * 1024, 0x10000, 3, false, link.DefaultTimeout, new EspProgress(_ViewModel, sync));
+						var memstm = new MemoryStream(pkg, false);
+						await link.FlashAsync(CancellationToken.None, memstm, 16 * 1024, 0x10000, 3, false, link.DefaultTimeout, new EspProgress(_ViewModel, sync));
 						sync.Post((st) => _ViewModel.AppendOutput("", true), null);
 						sync.Post((st) => _ViewModel.AppendOutput("Hard resetting", true), null);
 						link.Reset();
-						throw new Exception("The operation completed");
+						memstm = null;
+						pkg = null;
+						
 					}
 				});
 				_ViewModel.FlashProgress = 0;

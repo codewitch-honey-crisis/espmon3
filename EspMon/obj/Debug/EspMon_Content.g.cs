@@ -8,7 +8,6 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-[assembly: System.Windows.Resources.AssemblyAssociatedContentFileAttribute("esplink.exe")]
 [assembly: System.Windows.Resources.AssemblyAssociatedContentFileAttribute("esptool.exe")]
 
 

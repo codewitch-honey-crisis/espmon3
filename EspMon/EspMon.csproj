@@ -21,7 +21,7 @@
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
     <OutputPath>bin\Debug\</OutputPath>
-    <DefineConstants>TRACE;DEBUG;USE_ESPLINK_OOP</DefineConstants>
+    <DefineConstants>TRACE;DEBUG;USE_ESPLINK_OOP_</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
@@ -41,16 +41,13 @@
     <ApplicationIcon>espmon.ico</ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="esplink, Version=0.4.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\esplink.exe</HintPath>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Configuration.Install" />
     <Reference Include="System.Data" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.IO.Compression" />
     <Reference Include="System.IO.Compression.FileSystem" />
+    <Reference Include="System.Management" />
     <Reference Include="System.ServiceProcess" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
@@ -68,6 +65,28 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="App.cs" />
+    <Compile Include="EspLink\Devices\Esp32Device.cs" />
+    <Compile Include="EspLink\Devices\Esp32S3Device.cs" />
+    <Compile Include="EspLink\EspDevice.cs" />
+    <Compile Include="EspLink\EspLink.Command.cs" />
+    <Compile Include="EspLink\EspLink.cs" />
+    <Compile Include="EspLink\EspLink.Device.cs" />
+    <Compile Include="EspLink\EspLink.Flash.cs" />
+    <Compile Include="EspLink\EspLink.Frame.cs" />
+    <Compile Include="EspLink\EspLink.Lifetime.cs" />
+    <Compile Include="EspLink\EspLink.Memory.cs" />
+    <Compile Include="EspLink\EspLink.Pack.cs" />
+    <Compile Include="EspLink\EspLink.Registers.cs" />
+    <Compile Include="EspLink\EspLink.Reset.cs" />
+    <Compile Include="EspLink\EspLink.SerialPort.cs" />
+    <Compile Include="EspLink\EspLink.SpiFlash.cs" />
+    <Compile Include="EspLink\EspLink.Stub.cs" />
+    <Compile Include="EspLink\Json\JsonElement.cs" />
+    <Compile Include="EspLink\Json\JsonException.cs" />
+    <Compile Include="EspLink\Json\JsonParser.cs" />
+    <Compile Include="EspLink\Json\JsonRunners.cs" />
+    <Compile Include="EspLink\Json\JsonUtility.cs" />
+    <Compile Include="EspLink\Json\JsonWriter.cs" />
     <Compile Include="EspMonInstaller.cs">
       <SubType>Component</SubType>
     </Compile>
@@ -119,6 +138,10 @@
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
     <None Include="app.manifest" />
+    <None Include="EspLink\EspLink.csproj" />
+    <None Include="EspLink\README.md" />
+    <EmbeddedResource Include="EspLink\Stubs\esp32.json" />
+    <EmbeddedResource Include="EspLink\Stubs\esp32s3.json" />
     <None Include="firmware.zip">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
@@ -140,10 +163,7 @@
     <EmbeddedResource Include="espmon.ico" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="..\esplink.exe">
-      <Link>esplink.exe</Link>
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
+    <Resource Include="EspLink\LICENSE.txt" />
     <Content Include="esptool.exe" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

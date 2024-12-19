@@ -36,4 +36,3 @@ C:\Users\gazto\Documents\PlatformIO\Projects\espmon3\EspMon\obj\Debug\EspMon.exe
 C:\Users\gazto\Documents\PlatformIO\Projects\espmon3\EspMon\obj\Debug\EspMon.pdb
 C:\Users\gazto\Documents\PlatformIO\Projects\espmon3\EspMon\bin\Debug\firmware.zip
 C:\Users\gazto\Documents\PlatformIO\Projects\espmon3\EspMon\obj\Debug\EspMon_Content.g.cs
-C:\Users\gazto\Documents\PlatformIO\Projects\espmon3\EspMon\bin\Debug\esplink.exe
