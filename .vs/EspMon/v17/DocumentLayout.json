@@ -9,7 +9,7 @@
       "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\gazto\\AppData\\Local\\Temp\\.vsdbgsrc\\7cfd5d3e715f631b95ecbedfde0fd043cc3a7000c8899ea03496477363f27837\\Process.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{EEC5B7D4-C4EE-4928-B6DE-D6F6DEB8D187}|EspMon\\EspMon.csproj|c:\\users\\gazto\\documents\\platformio\\projects\\espmon3\\espmon\\esplink\\esplink.serialport.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "AbsoluteMoniker": "D:0:0:{EEC5B7D4-C4EE-4928-B6DE-D6F6DEB8D187}|EspMon\\EspMon.csproj|C:\\Users\\gazto\\Documents\\PlatformIO\\Projects\\espmon3\\espmon\\esplink\\esplink.serialport.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{EEC5B7D4-C4EE-4928-B6DE-D6F6DEB8D187}|EspMon\\EspMon.csproj|solutionrelative:espmon\\esplink\\esplink.serialport.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
@@ -163,8 +163,7 @@
               "RelativeToolTip": "EspMon\\EspLink\\EspLink.SerialPort.cs",
               "ViewState": "AgIAAE8AAAAAAAAAAAAkwIgAAAAFAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-12-19T04:51:20.648Z",
-              "EditorCaption": ""
+              "WhenOpened": "2024-12-19T04:51:20.648Z"
             },
             {
               "$type": "Document",
