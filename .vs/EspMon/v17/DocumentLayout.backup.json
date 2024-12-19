@@ -202,9 +202,9 @@
               "Title": "MainWindow.xaml.cs",
               "DocumentMoniker": "C:\\Users\\gazto\\Documents\\PlatformIO\\Projects\\espmon3\\EspMon\\MainWindow.xaml.cs",
               "RelativeDocumentMoniker": "EspMon\\MainWindow.xaml.cs",
-              "ToolTip": "C:\\Users\\gazto\\Documents\\PlatformIO\\Projects\\espmon3\\EspMon\\MainWindow.xaml.cs*",
-              "RelativeToolTip": "EspMon\\MainWindow.xaml.cs*",
-              "ViewState": "AgIAAGUBAAAAAAAAAAAiwJ8BAAAQAAAAAAAAAA==",
+              "ToolTip": "C:\\Users\\gazto\\Documents\\PlatformIO\\Projects\\espmon3\\EspMon\\MainWindow.xaml.cs",
+              "RelativeToolTip": "EspMon\\MainWindow.xaml.cs",
+              "ViewState": "AgIAABcBAAAAAAAAAAA4wEABAAAIAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2024-12-08T03:34:00.22Z",
               "EditorCaption": ""
@@ -218,8 +218,7 @@
               "ToolTip": "C:\\Users\\gazto\\Documents\\PlatformIO\\Projects\\espmon3\\EspMon\\MainWindow.xaml",
               "RelativeToolTip": "EspMon\\MainWindow.xaml",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003549|",
-              "WhenOpened": "2024-12-08T03:15:45.684Z",
-              "EditorCaption": ""
+              "WhenOpened": "2024-12-08T03:15:45.684Z"
             },
             {
               "$type": "Document",
@@ -231,8 +230,7 @@
               "RelativeToolTip": "EspMon\\ViewModel.cs",
               "ViewState": "AgIAACQAAAAAAAAAAIA4wFgAAAAGAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-12-08T02:46:44.014Z",
-              "EditorCaption": ""
+              "WhenOpened": "2024-12-08T02:46:44.014Z"
             },
             {
               "$type": "Document",

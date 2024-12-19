@@ -11,6 +11,7 @@ namespace EL
             Name = name;
             Magic = magic;
 			Id = id;
+
 		}
 		public string Name { get; set; }
         public uint Magic { get; set; }

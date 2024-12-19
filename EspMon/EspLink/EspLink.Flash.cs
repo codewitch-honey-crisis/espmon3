@@ -116,7 +116,7 @@ namespace EL
                 blockSize = Device.FLASH_WRITE_SIZE;
             }
             var stm = new MemoryStream(uncompressedInput.Length<=int.MaxValue?(int)uncompressedInput.Length:int.MaxValue);
-            CompressToZlibStream(uncompressedInput, stm);
+            await CompressToZlibStreamAsync(uncompressedInput, stm,cancellationToken);
             stm.Position = 0;
             var uclen = (uint)uncompressedInput.Length;
             var cln = (uint)stm.Length;
@@ -125,6 +125,7 @@ namespace EL
             var block = new byte[blockSize];
             for(int i = 0;i<blockCount;++i)
             {
+                // it's a memory stream so an async read would just be overhead
                 var bytesRead = stm.Read(block, 0, block.Length);
                 // pad any unread portion with 0xFF
                 for(int j = bytesRead;j<block.Length;++j)
@@ -144,13 +145,13 @@ namespace EL
             }
 			if (finalize)
             {
-
+                // this isn't necessary and exits the bootloader preventing further bootloader commands being issued.
                 await FlashDeflFinishAsync(cancellationToken, false, timeout);
             }
 			progress?.Report(100);
 
 		}
-		static void CompressToZlibStream(Stream inputStream, Stream compressedStream)
+		async static Task CompressToZlibStreamAsync(Stream inputStream, Stream compressedStream,CancellationToken cancellationToken)
 		{
 			// Write the zlib header (0x78, 0x9C for default compression)
 			compressedStream.WriteByte(0x78);
@@ -159,7 +160,7 @@ namespace EL
 			// Use DeflateStream to compress the data (without zlib header/footer)
 			using (DeflateStream deflateStream = new DeflateStream(compressedStream, CompressionLevel.Optimal, leaveOpen: true))
 			{
-				inputStream.CopyTo(deflateStream);
+				await inputStream.CopyToAsync(deflateStream,81920,cancellationToken);
 			}
 
 			// Calculate the zlib footer (Adler-32 checksum) for the compressed data

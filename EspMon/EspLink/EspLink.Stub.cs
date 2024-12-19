@@ -57,12 +57,12 @@ namespace EL
 			using (var stm = GetType().Assembly.GetManifestResourceStream(respath))
 			{
 				var reader = new StreamReader(stm, Encoding.UTF8);
-				dynamic json = JsonObject.Parse(reader);
-				var entryPoint = (uint)json.entry;
-				var text = Convert.FromBase64String(json.text);
-				var textStart = (uint)json.text_start;
-				var data = Convert.FromBase64String(json.data);
-				var dataStart = (uint)json.data_start;
+				var json = (JsonObject)JsonObject.Parse(reader);
+				var entryPoint = (uint)(double)json["entry"];
+				var text = Convert.FromBase64String((string)json["text"]);
+				var textStart = (uint)(double)json["text_start"];
+				var data = Convert.FromBase64String((string)json["data"]);
+				var dataStart = (uint)(double)json["data_start"];
 				return new EspStub(jsonName,entryPoint,text, textStart, data,dataStart);
 			}
 		}
