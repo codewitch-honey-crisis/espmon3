@@ -293,12 +293,10 @@ namespace EspMon
 		internal class EspProgress : IProgress<int>
 		{
 			ViewModel _model;
-			SynchronizationContext _sync;
 			int _old = -1;
-			public EspProgress(ViewModel viewModel, SynchronizationContext sync)
+			public EspProgress(ViewModel viewModel)
 			{
 				_model = viewModel;
-				_sync = sync;
 			}
 			public int Value { get; private set; }
 			public bool IsBounded
@@ -316,15 +314,13 @@ namespace EspMon
 				{
 					if (IsBounded)
 					{
-						_sync.Post((st) => _model.AppendOutput($"{value}%", true), null);
-						_sync.Post((st) => _model.FlashProgress=value, null);
-						//_sync.Post((st) => _model.IsIdle= false, null);
+						_model.AppendOutput($"{value}%", true);
+						_model.FlashProgress = value;
 					}
 					else
 					{
-						_sync.Post((st) => _model.AppendOutput(".", false), null);
-						_sync.Post((st) => _model.FlashProgress = 1, null);
-						//_sync.Post((st) => _model.IsIdle = false, null);
+						_model.AppendOutput(".", false);
+						_model.FlashProgress = 1;
 					}
 					_old = value;
 				}
@@ -369,47 +365,38 @@ namespace EspMon
 				stm.Close();
 				stm = null;
 				var tf = new TaskFactory(TaskCreationOptions.PreferFairness, TaskContinuationOptions.PreferFairness);
-				var sync = SynchronizationContext.Current;
 				var portName = comPortCombo.Text;
-				await tf.StartNew(async () =>
+				try
 				{
-					try
+					using (var link = new EspLink(portName))
 					{
-						using (var link = new EspLink(portName))
-						{
-							link.SerialHandshake = Handshake.RequestToSend;
-							sync.Post((st) => _ViewModel.AppendOutput("Connecting...", false), null);
-							await link.ConnectAsync(true, 3, true, CancellationToken.None, link.DefaultTimeout, new EspProgress(_ViewModel, sync));
-							sync.Post((st) => _ViewModel.AppendOutput("done!", true), null);
-							sync.Post((st) => _ViewModel.AppendOutput("Running Stub...", true), null);
-							await link.RunStubAsync(CancellationToken.None, link.DefaultTimeout, new EspProgress(_ViewModel, sync));
-							sync.Post((st) => _ViewModel.AppendOutput("", true), null);
-							await link.SetBaudRateAsync(115200, 115200 * 8, CancellationToken.None, link.DefaultTimeout);
-							sync.Post((st) => _ViewModel.AppendOutput($"Changed baud rate to {link.BaudRate}", true), null);
-							sync.Post((st) => _ViewModel.AppendOutput($"Flashing to offset 0x10000... ", true), null);
-							var memstm = new MemoryStream(pkg, false);
-							await link.FlashAsync(CancellationToken.None, memstm, 16 * 1024, 0x10000, 3, false, link.DefaultTimeout, new EspProgress(_ViewModel, sync));
-							sync.Post((st) => _ViewModel.AppendOutput("", true), null);
-							sync.Post((st) => _ViewModel.AppendOutput("Hard resetting", true), null);
-							link.Reset();
-							memstm = null;
-
-							sync.Send((st) => _ViewModel.AppendOutput($"Finished flashing {pkg.Length / 1024}KB to {portName}", true), null);
-							pkg = null;
-						}
+						link.SerialHandshake = Handshake.RequestToSend;
+						_ViewModel.AppendOutput("Connecting...", false);
+						await link.ConnectAsync(true, 3, true, CancellationToken.None, link.DefaultTimeout, new EspProgress(_ViewModel));
+						_ViewModel.AppendOutput("done!", true);
+						_ViewModel.AppendOutput("Running Stub...", true);
+						await link.RunStubAsync(CancellationToken.None, link.DefaultTimeout, new EspProgress(_ViewModel));
+						_ViewModel.AppendOutput("", true);
+						await link.SetBaudRateAsync(115200, 115200 * 8, CancellationToken.None, link.DefaultTimeout);
+						_ViewModel.AppendOutput($"Changed baud rate to {link.BaudRate}", true);
+						_ViewModel.AppendOutput($"Flashing to offset 0x10000... ", true);
+						var memstm = new MemoryStream(pkg, false);
+						await link.FlashAsync(CancellationToken.None, memstm, 16 * 1024, 0x10000, 3, false, link.DefaultTimeout, new EspProgress(_ViewModel));
+						_ViewModel.AppendOutput("", true);
+						_ViewModel.AppendOutput("Hard resetting", true);
+						link.Reset();
+						memstm = null;
+						_ViewModel.AppendOutput($"Finished flashing {pkg.Length / 1024}KB to {portName}", true);
+						pkg = null;
 					}
-					catch (Exception ex)
-					{
-						sync.Send((st)=> { 
-							_ViewModel.AppendOutput($"Error flashing firmware: {ex.Message}", true);
-							_ViewModel.FlashProgress = 0;
-							_ViewModel.IsIdle = true;
-							DoEvents();
-						}, null);
-					}
-				});
-				
-				
+				}
+				catch (Exception ex)
+				{
+					_ViewModel.AppendOutput($"Error flashing firmware: {ex.Message}", true);
+					_ViewModel.FlashProgress = 0;
+					_ViewModel.IsIdle = true;
+					DoEvents();	
+				}
 			}
 			finally
 			{

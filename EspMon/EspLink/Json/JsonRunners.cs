@@ -132,9 +132,9 @@ namespace Json {
         public class Enumerator : Object, IEnumerator<FAMatch> {
             private int _state;
             private FAMatch _current;
-            private WeakReference<FARunner> _parent;
+            FARunner _parent;
             public Enumerator(FARunner parent) {
-                this._parent = new WeakReference<FARunner>(parent);
+                this._parent =parent;
                 this._state = -2;
             }
             public FAMatch Current {
@@ -170,10 +170,8 @@ namespace Json {
                     return false;
                 }
                 this._state = 0;
-                FARunner parent;
-                if ((false == this._parent.TryGetTarget(out parent))) {
-                    throw new InvalidOperationException("The parent was destroyed");
-                }
+                FARunner parent = _parent;
+          
                 this._current = parent.NextMatch();
                 if ((this._current.SymbolId == -2)) {
                     this._state = -2;
@@ -185,11 +183,7 @@ namespace Json {
                 if ((this._state == -3)) {
                     throw new ObjectDisposedException("Enumerator");
                 }
-                FARunner parent;
-                if ((false == this._parent.TryGetTarget(out parent))) {
-                    throw new InvalidOperationException("The parent was destroyed");
-                }
-                parent.Reset();
+                _parent.Reset();
                 this._state = -2;
             }
         }
