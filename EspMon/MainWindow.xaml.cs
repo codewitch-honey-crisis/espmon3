@@ -333,6 +333,7 @@ namespace EspMon
 			{
 				startPending = true;
 				_ViewModel.IsStarted = false;
+				Thread.Sleep(100);
 			}
 			var path = Path.Combine(Path.GetDirectoryName(Assembly.GetEntryAssembly().Location), "firmware.zip");
 			MemoryStream stm = null;
