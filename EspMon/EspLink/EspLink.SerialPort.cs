@@ -51,7 +51,7 @@ namespace EL
 
 		private void _port_ErrorReceived(object sender, SerialErrorReceivedEventArgs e)
 		{
-			System.Diagnostics.Debug.WriteLine("Serial error: "+e.EventType.ToString());
+			//System.Diagnostics.Debug.WriteLine("Serial error: "+e.EventType.ToString());
 		}
 
 		int ReadByteNoBlock()
