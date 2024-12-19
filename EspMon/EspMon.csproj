@@ -138,7 +138,6 @@
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
     <None Include="app.manifest" />
-    <None Include="EspLink\EspLink.csproj" />
     <None Include="EspLink\README.md" />
     <EmbeddedResource Include="EspLink\Stubs\esp32.json" />
     <EmbeddedResource Include="EspLink\Stubs\esp32s3.json" />

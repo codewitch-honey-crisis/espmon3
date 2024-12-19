@@ -373,27 +373,39 @@ namespace EspMon
 				var portName = comPortCombo.Text;
 				await tf.StartNew(async () =>
 				{
-					using (var link = new EspLink(portName))
+					try
 					{
-						link.SerialHandshake = Handshake.RequestToSend;
-						sync.Post((st) => _ViewModel.AppendOutput("Connecting...", false), null);
-						await link.ConnectAsync(true, 3, true, CancellationToken.None, link.DefaultTimeout, new EspProgress(_ViewModel, sync));
-						sync.Post((st) => _ViewModel.AppendOutput("done!", true), null);
-						sync.Post((st) => _ViewModel.AppendOutput("Running Stub...", true), null);
-						await link.RunStubAsync(CancellationToken.None, link.DefaultTimeout, new EspProgress(_ViewModel, sync));
-						sync.Post((st) => _ViewModel.AppendOutput("", true), null);
-						await link.SetBaudRateAsync(115200, 115200 * 8, CancellationToken.None, link.DefaultTimeout);
-						sync.Post((st) => _ViewModel.AppendOutput($"Changed baud rate to {link.BaudRate}", true), null);
-						sync.Post((st) => _ViewModel.AppendOutput($"Flashing to offset 0x10000... ", true), null);
-						var memstm = new MemoryStream(pkg, false);
-						await link.FlashAsync(CancellationToken.None, memstm, 16 * 1024, 0x10000, 3, false, link.DefaultTimeout, new EspProgress(_ViewModel, sync));
-						sync.Post((st) => _ViewModel.AppendOutput("", true), null);
-						sync.Post((st) => _ViewModel.AppendOutput("Hard resetting", true), null);
-						link.Reset();
-						memstm = null;
-						
-						sync.Send((st) => _ViewModel.AppendOutput($"Finished flashing {pkg.Length/1024}KB to {portName}", true), null);
-						pkg = null;
+						using (var link = new EspLink(portName))
+						{
+							link.SerialHandshake = Handshake.RequestToSend;
+							sync.Post((st) => _ViewModel.AppendOutput("Connecting...", false), null);
+							await link.ConnectAsync(true, 3, true, CancellationToken.None, link.DefaultTimeout, new EspProgress(_ViewModel, sync));
+							sync.Post((st) => _ViewModel.AppendOutput("done!", true), null);
+							sync.Post((st) => _ViewModel.AppendOutput("Running Stub...", true), null);
+							await link.RunStubAsync(CancellationToken.None, link.DefaultTimeout, new EspProgress(_ViewModel, sync));
+							sync.Post((st) => _ViewModel.AppendOutput("", true), null);
+							await link.SetBaudRateAsync(115200, 115200 * 8, CancellationToken.None, link.DefaultTimeout);
+							sync.Post((st) => _ViewModel.AppendOutput($"Changed baud rate to {link.BaudRate}", true), null);
+							sync.Post((st) => _ViewModel.AppendOutput($"Flashing to offset 0x10000... ", true), null);
+							var memstm = new MemoryStream(pkg, false);
+							await link.FlashAsync(CancellationToken.None, memstm, 16 * 1024, 0x10000, 3, false, link.DefaultTimeout, new EspProgress(_ViewModel, sync));
+							sync.Post((st) => _ViewModel.AppendOutput("", true), null);
+							sync.Post((st) => _ViewModel.AppendOutput("Hard resetting", true), null);
+							link.Reset();
+							memstm = null;
+
+							sync.Send((st) => _ViewModel.AppendOutput($"Finished flashing {pkg.Length / 1024}KB to {portName}", true), null);
+							pkg = null;
+						}
+					}
+					catch (Exception ex)
+					{
+						sync.Send((st)=> { 
+							_ViewModel.AppendOutput($"Error flashing firmware: {ex.Message}", true);
+							_ViewModel.FlashProgress = 0;
+							_ViewModel.IsIdle = true;
+							DoEvents();
+						}, null);
 					}
 				});
 				
