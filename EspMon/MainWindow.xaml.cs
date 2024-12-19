@@ -318,10 +318,13 @@ namespace EspMon
 					{
 						_sync.Post((st) => _model.AppendOutput($"{value}%", true), null);
 						_sync.Post((st) => _model.FlashProgress=value, null);
+						//_sync.Post((st) => _model.IsIdle= false, null);
 					}
 					else
 					{
 						_sync.Post((st) => _model.AppendOutput(".", false), null);
+						_sync.Post((st) => _model.FlashProgress = 1, null);
+						//_sync.Post((st) => _model.IsIdle = false, null);
 					}
 					_old = value;
 				}
@@ -334,7 +337,7 @@ namespace EspMon
 			{
 				startPending = true;
 				_ViewModel.IsStarted = false;
-				Thread.Sleep(100);
+				DoEvents();
 			}
 			var path = Path.Combine(Path.GetDirectoryName(Assembly.GetEntryAssembly().Location), "firmware.zip");
 			MemoryStream stm = null;
@@ -388,16 +391,13 @@ namespace EspMon
 						sync.Post((st) => _ViewModel.AppendOutput("Hard resetting", true), null);
 						link.Reset();
 						memstm = null;
-						pkg = null;
 						
+						sync.Send((st) => _ViewModel.AppendOutput($"Finished flashing {pkg.Length/1024}KB to {portName}", true), null);
+						pkg = null;
 					}
 				});
-				_ViewModel.FlashProgress = 0;
-				_ViewModel.IsIdle = true;
-				if (startPending)
-				{
-					_ViewModel.IsStarted = true;
-				}
+				
+				
 			}
 			finally
 			{
@@ -409,6 +409,18 @@ namespace EspMon
 				{
 					file.Dispose();
 				}
+				_ViewModel.FlashProgress = 0;
+				_ViewModel.IsIdle = true;
+				DoEvents();
+				Thread.Sleep(50);
+				
+				if (startPending)
+				{
+					_ViewModel.IsStarted = true;
+				}
+				DoEvents();
+
+
 			}
 		}
 #endif

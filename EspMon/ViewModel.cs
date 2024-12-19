@@ -81,12 +81,12 @@ namespace EspMon
 			get { return _isIdle; }
 			set
 			{
-				if (_isIdle != value)
-				{
+				//if (_isIdle != value)
+				//{
 					PropertyChanging?.Invoke(this, new PropertyChangingEventArgs(nameof(IsIdle)));
 					_isIdle = value;
 					PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(IsIdle)));
-				}
+				//}
 			}
 		}
 
