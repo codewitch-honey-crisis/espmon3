@@ -317,6 +317,7 @@ namespace EspMon
 					if (IsBounded)
 					{
 						_sync.Post((st) => _model.AppendOutput($"{value}%", true), null);
+						_sync.Post((st) => _model.FlashProgress=value, null);
 					}
 					else
 					{
@@ -371,14 +372,14 @@ namespace EspMon
 				{
 					using (var link = new EspLink(portName))
 					{
-						link.SerialHandshake = Handshake.RequestToSendXOnXOff;
+						link.SerialHandshake = Handshake.RequestToSend;
 						sync.Post((st) => _ViewModel.AppendOutput("Connecting...", false), null);
 						await link.ConnectAsync(true, 3, true, CancellationToken.None, link.DefaultTimeout, new EspProgress(_ViewModel, sync));
 						sync.Post((st) => _ViewModel.AppendOutput("done!", true), null);
 						sync.Post((st) => _ViewModel.AppendOutput("Running Stub...", true), null);
 						await link.RunStubAsync(CancellationToken.None, link.DefaultTimeout, new EspProgress(_ViewModel, sync));
 						sync.Post((st) => _ViewModel.AppendOutput("", true), null);
-						await link.SetBaudRateAsync(115200, 115200 * 4, CancellationToken.None, link.DefaultTimeout);
+						await link.SetBaudRateAsync(115200, 115200 * 8, CancellationToken.None, link.DefaultTimeout);
 						sync.Post((st) => _ViewModel.AppendOutput($"Changed baud rate to {link.BaudRate}", true), null);
 						sync.Post((st) => _ViewModel.AppendOutput($"Flashing to offset 0x10000... ", true), null);
 						var memstm = new MemoryStream(pkg, false);
