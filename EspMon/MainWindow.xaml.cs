@@ -530,17 +530,11 @@ namespace EspMon
 				{
 					extra += " --cputmax " + _ViewModel.CpuTMax.ToString();
 					extra += " --gputmax " + _ViewModel.GpuTMax.ToString();
-					var first = true;
 					foreach (var port in _ViewModel.PortItems)
 					{
 						if (port.IsChecked)
 						{
-							if (first)
-							{
-								first = false;
-								extra += " --ports";
-							}
-							extra += (" " + port.Name);
+							extra += (" --" + port.Name);
 
 						}
 					}
