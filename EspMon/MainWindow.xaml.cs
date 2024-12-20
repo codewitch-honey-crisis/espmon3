@@ -184,6 +184,10 @@ namespace EspMon
 					var firmware = args.Contains("--firmware");
 					var persistent = args.Contains("--persistent");
 					var started = args.Contains("--started");
+					if (firmware)
+					{
+						MessageBox.Show("The firmware has been updated. You should reflash your device(s).", "Update occurred", MessageBoxButton.OK);
+					}
 					if (!persistent)
 					{
 						var cputmax = Array.IndexOf(args, "--cputmax");
@@ -205,7 +209,7 @@ namespace EspMon
 							}
 						}
 						_ViewModel.IsStarted = started;
-						_ViewModel.Refresh();
+		
 						for (int i = 0; i < args.Length; i++)
 						{
 							var a = args[i].Substring(2);
@@ -221,10 +225,7 @@ namespace EspMon
 						_ViewModel.IsPersistent = true;
 						_ViewModel.IsStarted = started;
 					}
-					if (firmware)
-					{
-						MessageBox.Show("The firmware has been updated. You should reflash your device(s).", "Update occurred", MessageBoxButton.OK);
-					}
+					
 				}
 			}
 		}
