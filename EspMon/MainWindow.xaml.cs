@@ -40,7 +40,6 @@ namespace EspMon
 		{
 			InitializeComponent();
 
-			this.Loaded += MainWindow_Loaded;
 			_ViewModel = new ViewModel(SynchronizationContext.Current);
 			DataContext = _ViewModel;
 			using (Stream stm = System.Reflection.Assembly.GetEntryAssembly().GetManifestResourceStream("EspMon.espmon.ico"))
@@ -95,27 +94,7 @@ namespace EspMon
 			}
 			return null;
 		}
-		public void FinishUpdate(bool persistent, bool started, bool exe, bool firmware, int cpuTMax, int gpuTMax,string[] comPorts)
-		{
-			_ViewModel.IsPersistent = persistent;
-			if (!persistent)
-			{
-				for (int i = 0; i < comPorts.Length; i++)
-				{					var item = FindPortItem(comPorts[i]);
-					if (item != null)
-					{
-						item.IsChecked = true;
-					}
-				}
-				_ViewModel.CpuTMax = cpuTMax;
-				_ViewModel.GpuTMax = gpuTMax;
-			}
-			_ViewModel.IsStarted = started;
-			if (firmware)
-			{
-				MessageBox.Show("The firmware has been updated. You should reflash your device(s).","Update occurred",MessageBoxButton.OK);
-			}
-		}
+		
 
 		private void _appActivator_AppActivated(object sender, EventArgs e)
 		{
@@ -212,7 +191,7 @@ namespace EspMon
 						if (cputmax > -1 && cputmax < args.Length - 1)
 						{
 							int tmax;
-							if (int.TryParse(args[cputmax], NumberStyles.Integer, CultureInfo.InvariantCulture.NumberFormat, out tmax))
+							if (int.TryParse(args[cputmax+1], NumberStyles.Integer, CultureInfo.InvariantCulture.NumberFormat, out tmax))
 							{
 								_ViewModel.CpuTMax = tmax;
 							}
@@ -220,11 +199,13 @@ namespace EspMon
 						if (gputmax > -1 && gputmax < args.Length - 1)
 						{
 							int tmax;
-							if (int.TryParse(args[gputmax], NumberStyles.Integer, CultureInfo.InvariantCulture.NumberFormat, out tmax))
+							if (int.TryParse(args[gputmax+1], NumberStyles.Integer, CultureInfo.InvariantCulture.NumberFormat, out tmax))
 							{
 								_ViewModel.GpuTMax = tmax;
 							}
 						}
+						_ViewModel.IsStarted = started;
+						_ViewModel.Refresh();
 						for (int i = 0; i < args.Length; i++)
 						{
 							var a = args[i].Substring(2);
@@ -234,11 +215,16 @@ namespace EspMon
 								port.IsChecked = true;
 							}
 						}
+						
 					} else
 					{
 						_ViewModel.IsPersistent = true;
+						_ViewModel.IsStarted = started;
 					}
-					_ViewModel.IsStarted = started;
+					if (firmware)
+					{
+						MessageBox.Show("The firmware has been updated. You should reflash your device(s).", "Update occurred", MessageBoxButton.OK);
+					}
 				}
 			}
 		}

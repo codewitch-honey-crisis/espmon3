@@ -265,7 +265,8 @@ namespace EspMon
 		{
 			ClearPortItems();
 			_controller.Refresh();
-			foreach (PortItem item in _controller.PortItems)
+			var items = _controller.PortItems.ToArray();
+			foreach (PortItem item in items)
 			{
 				PortItems.Add(item);
 			}

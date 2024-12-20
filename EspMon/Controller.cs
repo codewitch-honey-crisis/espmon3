@@ -145,14 +145,14 @@ namespace EspMon
 			
 			foreach (var port in portSet)
 			{
-				_syncContext.Post(new SendOrPostCallback((object st) => {
+				_syncContext.Send(new SendOrPostCallback((object st) => {
 					if (0>PortIndex(port))
 					{
 						_ports.Add(new PortItem(port, false));
 					}
 				}), null);
 			}
-			_syncContext.Post(new SendOrPostCallback((object st) => {
+			_syncContext.Send(new SendOrPostCallback((object st) => {
 				PropertyChanging?.Invoke(st, new PropertyChangingEventArgs(nameof(CpuTMax)));
 				PropertyChanged?.Invoke(st, new PropertyChangedEventArgs(nameof(CpuTMax)));
 				PropertyChanging?.Invoke(st, new PropertyChangingEventArgs(nameof(GpuTMax)));
