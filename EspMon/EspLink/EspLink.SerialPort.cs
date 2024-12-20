@@ -2,6 +2,7 @@
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Globalization;
+using System.IO;
 using System.IO.Ports;
 using System.Management;
 using System.Threading;
@@ -34,17 +35,21 @@ namespace EL
 				_port = new SerialPort(_portName, 115200, Parity.None, 8, StopBits.One);
 				_port.DataReceived += _port_DataReceived;
 				_port.ErrorReceived += _port_ErrorReceived;
-				
-				
 			}
 			if (!_port.IsOpen)
 			{
-				try
+				for (int i = 0; i < 10; ++i)
 				{
-					_port.Open();
-				}
+					try
+					{
+						_port.Open();
+						return _port;
+					}
 
-				catch { return null; }
+					catch { }
+					Thread.Sleep(100);
+				}
+				throw new IOException("The port is busy");
 			}
 			return _port;
 		}

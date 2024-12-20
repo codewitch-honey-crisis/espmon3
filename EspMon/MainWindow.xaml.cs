@@ -439,10 +439,6 @@ namespace EspMon
 				{
 					throw new Exception("Unable to find archive entry");
 				}
-				var pkg = stm.ToArray();
-				stm.Close();
-				stm = null;
-				var tf = new TaskFactory(TaskCreationOptions.PreferFairness, TaskContinuationOptions.PreferFairness);
 				var portName = comPortCombo.Text;
 				try
 				{
@@ -458,14 +454,11 @@ namespace EspMon
 						await link.SetBaudRateAsync(115200, 115200 * 8, CancellationToken.None, link.DefaultTimeout);
 						_ViewModel.AppendOutput($"Changed baud rate to {link.BaudRate}", true);
 						_ViewModel.AppendOutput($"Flashing to offset 0x10000... ", true);
-						var memstm = new MemoryStream(pkg, false);
-						await link.FlashAsync(CancellationToken.None, memstm, 16 * 1024, 0x10000, 3, false, link.DefaultTimeout, new EspProgress(_ViewModel));
+						await link.FlashAsync(CancellationToken.None, stm, 16 * 1024, 0x10000, 3, false, link.DefaultTimeout, new EspProgress(_ViewModel));
 						_ViewModel.AppendOutput("", true);
 						_ViewModel.AppendOutput("Hard resetting", true);
 						link.Reset();
-						memstm = null;
-						_ViewModel.AppendOutput($"Finished flashing {pkg.Length / 1024}KB to {portName}", true);
-						pkg = null;
+						_ViewModel.AppendOutput($"Finished flashing {stm.Length / 1024}KB to {portName}", true);
 					}
 				}
 				catch (Exception ex)
@@ -474,6 +467,15 @@ namespace EspMon
 					_ViewModel.FlashProgress = 0;
 					_ViewModel.IsIdle = true;
 					DoEvents();	
+				}
+				finally
+				{
+					if (stm != null)
+					{
+						stm.Close();
+						stm = null;
+					}
+
 				}
 			}
 			finally
