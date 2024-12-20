@@ -15,6 +15,7 @@ namespace EspMonUpdater
 		{
 			var path = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
 			var exeFile = Path.Combine(path, "EspMon.exe");
+			var ohwmFile = Path.Combine(path, "OpenHardwareMonitorLib.dll");
 			var targetFile = exeFile;
 			var firmwareFile = Path.Combine(path, "firmware.zip");
 			var exeUpdated = false;
@@ -58,7 +59,26 @@ namespace EspMonUpdater
 					return 1;
 				}
 			}
+			targetFile = ohwmFile; ;
+			downloadFile = targetFile + ".download";
+			if (File.Exists(downloadFile))
+			{
+				try
+				{
+					File.Delete(targetFile);
+				}
+				catch { };
 
+				try
+				{
+					File.Move(downloadFile, targetFile);
+					exeUpdated = true;
+				}
+				catch
+				{
+					return 1;
+				}
+			}
 			var psi = new ProcessStartInfo()
 			{
 				FileName = exeFile,

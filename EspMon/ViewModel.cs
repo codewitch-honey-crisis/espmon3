@@ -308,6 +308,7 @@ namespace EspMon
 		const string tagUrl = "https://github.com/codewitch-honey-crisis/espmon3/releases";
 		const string exeUpdateUrlFormat = "https://github.com/codewitch-honey-crisis/espmon3/releases/download/{0}/EspMon.exe";
 		const string firmwareUpdateUrlFormat = "https://github.com/codewitch-honey-crisis/espmon3/releases/download/{0}/firmware.zip";
+		const string ohwmUpdateUrlFormat = "https://github.com/codewitch-honey-crisis/espmon3/releases/download/{0}/OpenHardwareMonitorLib.dll";
 		Timer _updateCheckTimer = null;
 		Version _latestVersion = new Version();
 		static async Task DownloadVersionAsync(Version version)
@@ -329,6 +330,7 @@ namespace EspMon
 						await input.CopyToAsync(output);
 					}
 				}
+
 				url = string.Format(firmwareUpdateUrlFormat, version.ToString());
 				using (var input = await http.GetStreamAsync(url))
 				{
@@ -343,8 +345,21 @@ namespace EspMon
 						await input.CopyToAsync(output);
 					}
 				}
+				url = string.Format(ohwmUpdateUrlFormat, version.ToString());
+				using (var input = await http.GetStreamAsync(url))
+				{
+					var filepath = Path.Combine(localpath, "OpenHardwareMonitorLib.dll.download");
+					try
+					{
+						System.IO.File.Delete(filepath);
+					}
+					catch { }
+					using (var output = System.IO.File.OpenWrite(filepath))
+					{
+						await input.CopyToAsync(output);
+					}
+				}
 			}
-
 		}
 		static async Task<Version> TryGetLaterVersionAsync()
 		{
