@@ -114,7 +114,7 @@ namespace EspMon
 				foreach (var name in regPortNames)
 				{
 					portSet.Add(name);
-					_syncContext.Post(new SendOrPostCallback((object st) => { 
+					_syncContext.Send(new SendOrPostCallback((object st) => { 
 						if(0>PortIndex(name))
 						{
 							_ports.Add(new PortItem(name,true));

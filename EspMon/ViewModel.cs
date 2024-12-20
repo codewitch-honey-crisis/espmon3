@@ -465,5 +465,10 @@ namespace EspMon
 			IsChecked = isChecked;
 			Port = null;
 		}
+		public override string ToString()
+		{
+			string suffix = IsChecked ? "Open" : "Closed";
+			return $"{Name} - {suffix}";
+		}
 	}
 }
