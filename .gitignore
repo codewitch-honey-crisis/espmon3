@@ -33,3 +33,9 @@ Waveshare ESP32S3 4.3 inch.bin
 /EspMon/obj/Release/DesignTimeResolveAssemblyReferencesInput.cache
 /EspMon/obj/Release/EspMon.exe
 /EspMon/obj/Release/EspMon.pdb
+/EspMon/bin/Debug/EspMon.InstallLog
+/EspMon/bin/Debug/EspMon.InstallState
+/EspMon/bin/Debug/InstallUtil.InstallLog
+/EspMon/bin/Release/InstallUtil.InstallLog
+/EspMon/bin/Release/EspMon.InstallLog
+/EspMon/bin/Release/EspMon.InstallState
