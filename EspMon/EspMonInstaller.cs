@@ -1,5 +1,4 @@
-﻿using System.Collections;
-using System.ComponentModel;
+﻿using System.ComponentModel;
 using System.Configuration.Install;
 using System.ServiceProcess;
 
@@ -19,7 +18,7 @@ namespace EspMon
 			_espMonInstaller.StartType = ServiceStartMode.Automatic;
 			_espMonInstaller.DisplayName = "EspMon Service";
 			_espMonInstaller.ServiceName = "EspMon Service";
-			_espMonInstaller.Description = "Hardware CPU/GPU monitoring";
+			_espMonInstaller.Description = "Provides CPU/GPU monitoring over serial";
 			Installers.Add(_espMonInstaller);
 			Installers.Add(_processInstaller);
 		}

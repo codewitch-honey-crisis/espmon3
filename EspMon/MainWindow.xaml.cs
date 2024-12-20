@@ -1,30 +1,22 @@
-﻿using Microsoft.Win32;
-
-using OpenHardwareMonitor.Hardware;
-using Path = System.IO.Path;
+﻿using Path = System.IO.Path;
 using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.ComponentModel;
-using System.Configuration.Install;
 using System.IO;
 using System.IO.Ports;
-using System.Linq;
 using System.Reflection;
-using System.Runtime.InteropServices.ComTypes;
-using System.ServiceProcess;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.IO.Compression;
-using System.Diagnostics;
-using System.Windows.Input;
-using System.Text;
-using System.Windows.Shapes;
 using System.Windows.Threading;
 using System.Windows.Controls;
 using EL;
-using static System.Windows.Forms.VisualStyles.VisualStyleElement.Rebar;
+using System.Net.Http;
+using System.Text.RegularExpressions;
+using System.Diagnostics;
+using System.Linq;
+using System.Globalization;
 
 namespace EspMon
 {
@@ -37,18 +29,19 @@ namespace EspMon
 	{
 		internal const int UploadBaud = 115200 * 4;
 		AppActivator _appActivator;
+		private string _updateArgs;
 		private System.Windows.Forms.ContextMenu NotifyContextMenu;
 		private System.Windows.Forms.MenuItem NotifyContextMenuStarted;
 		private System.Windows.Forms.MenuItem NotifyContextMenuSeparator;
 		private System.Windows.Forms.MenuItem NotifyContextMenuShow;
 		ViewModel _ViewModel;
 		System.Windows.Forms.NotifyIcon _notifyIcon;
-		public MainWindow()
+		private void Init()
 		{
 			InitializeComponent();
 
 			this.Loaded += MainWindow_Loaded;
-			_ViewModel = new ViewModel();
+			_ViewModel = new ViewModel(SynchronizationContext.Current);
 			DataContext = _ViewModel;
 			using (Stream stm = System.Reflection.Assembly.GetEntryAssembly().GetManifestResourceStream("EspMon.espmon.ico"))
 			{
@@ -86,6 +79,42 @@ namespace EspMon
 			_ViewModel.PropertyChanging += _ViewModel_PropertyChanging;
 			_ViewModel.InstallComplete += _ViewModel_InstallComplete;
 			_ViewModel.UninstallComplete += _ViewModel_UninstallComplete;
+		}
+		public MainWindow()
+		{
+			Init();
+		}
+		PortItem FindPortItem(string name)
+		{
+			foreach(var item in _ViewModel.PortItems)
+			{
+				if(item.Name.Equals(name,StringComparison.OrdinalIgnoreCase))
+				{
+					return item;
+				}
+			}
+			return null;
+		}
+		public void FinishUpdate(bool persistent, bool started, bool exe, bool firmware, int cpuTMax, int gpuTMax,string[] comPorts)
+		{
+			_ViewModel.IsPersistent = persistent;
+			if (!persistent)
+			{
+				for (int i = 0; i < comPorts.Length; i++)
+				{					var item = FindPortItem(comPorts[i]);
+					if (item != null)
+					{
+						item.IsChecked = true;
+					}
+				}
+				_ViewModel.CpuTMax = cpuTMax;
+				_ViewModel.GpuTMax = gpuTMax;
+			}
+			_ViewModel.IsStarted = started;
+			if (firmware)
+			{
+				MessageBox.Show("The firmware has been updated. You should reflash your device(s).","Update occurred",MessageBoxButton.OK);
+			}
 		}
 
 		private void _appActivator_AppActivated(object sender, EventArgs e)
@@ -162,6 +191,56 @@ namespace EspMon
 		private void MainWindow_Loaded(object sender, RoutedEventArgs e)
 		{
 			_ViewModel.Refresh();
+			var args = App.Instance.UpdateArgs;
+			if (args!=null && args.Length>0)
+			{
+				if (args.Contains("--finish_updater"))
+				{
+					try
+					{
+						File.Delete(Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), "EspMonUpdater.exe"));
+					}
+					catch { }
+					var exe = args.Contains("--exe");
+					var firmware = args.Contains("--firmware");
+					var persistent = args.Contains("--persistent");
+					var started = args.Contains("--started");
+					if (!persistent)
+					{
+						var cputmax = Array.IndexOf(args, "--cputmax");
+						var gputmax = Array.IndexOf(args, "--gputmax");
+						if (cputmax > -1 && cputmax < args.Length - 1)
+						{
+							int tmax;
+							if (int.TryParse(args[cputmax], NumberStyles.Integer, CultureInfo.InvariantCulture.NumberFormat, out tmax))
+							{
+								_ViewModel.CpuTMax = tmax;
+							}
+						}
+						if (gputmax > -1 && gputmax < args.Length - 1)
+						{
+							int tmax;
+							if (int.TryParse(args[gputmax], NumberStyles.Integer, CultureInfo.InvariantCulture.NumberFormat, out tmax))
+							{
+								_ViewModel.GpuTMax = tmax;
+							}
+						}
+						for (int i = 0; i < args.Length; i++)
+						{
+							var a = args[i].Substring(2);
+							var port = FindPortItem(a);
+							if (port != null)
+							{
+								port.IsChecked = true;
+							}
+						}
+					} else
+					{
+						_ViewModel.IsPersistent = true;
+					}
+					_ViewModel.IsStarted = started;
+				}
+			}
 		}
 
 		protected override void OnInitialized(EventArgs e)
@@ -178,6 +257,18 @@ namespace EspMon
 			_ViewModel.Dispose();
 			_notifyIcon.Dispose();
 			_notifyIcon = null;
+			if (_updateArgs != null)
+			{
+				// we're doing an update
+				var psi = new ProcessStartInfo()
+				{
+					FileName = Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), "EspMonUpdater.exe"),
+					UseShellExecute = true,
+					Verb = "runas",
+					Arguments = _updateArgs
+				};
+				var proc = Process.Start(psi);
+			}
 			base.OnClosed(e);
 		}
 		private void comPortsRefresh_Click(object sender, RoutedEventArgs e)
@@ -422,6 +513,48 @@ namespace EspMon
 
 			}
 		}
+
+		private async void updateButton_Click(object sender, RoutedEventArgs e)
+		{
+			var updated = await _ViewModel.PrepareUpdateAsync();
+			if (updated)
+			{
+				var extra = "";
+				_updateArgs = "--finish_updater";
+				if (_ViewModel.IsPersistent)
+				{
+					_updateArgs += " --persistent";
+					_ViewModel.IsPersistent = false;
+				}
+				else
+				{
+					extra += " --cputmax " + _ViewModel.CpuTMax.ToString();
+					extra += " --gputmax " + _ViewModel.GpuTMax.ToString();
+					var first = true;
+					foreach (var port in _ViewModel.PortItems)
+					{
+						if (port.IsChecked)
+						{
+							if (first)
+							{
+								first = false;
+								extra += " --ports";
+							}
+							extra += (" " + port.Name);
+
+						}
+					}
+				}
+				if (_ViewModel.IsStarted)
+				{
+					_ViewModel.IsStarted = false;
+					_updateArgs += " --started";
+				}
+				_updateArgs += extra;
+				Close();
+			}
+			
+		}
 #endif
 #if USE_ESPLINK_OOP
 		private void flashDeviceButton_Click(object sender, RoutedEventArgs e)
@@ -615,5 +748,6 @@ namespace EspMon
 
 		}
 #endif
+
 	}
 }

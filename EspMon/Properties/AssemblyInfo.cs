@@ -12,7 +12,7 @@ using System.Windows;
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("honey the codewitch")]
 [assembly: AssemblyProduct("EspMon")]
-[assembly: AssemblyCopyright("Copyright ©  2024-2025 by honey the codewitch")]
+[assembly: AssemblyCopyright("Copyright © 2024-2025 by honey the codewitch")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
@@ -48,5 +48,5 @@ using System.Windows;
 //      Build Number
 //      Revision
 //
-[assembly: AssemblyVersion("1.0.0.0")]
-[assembly: AssemblyFileVersion("1.0.0.0")]
+[assembly: AssemblyVersion("0.1.1.0")]
+[assembly: AssemblyFileVersion("0.1.1.0")]

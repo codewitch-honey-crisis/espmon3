@@ -163,6 +163,9 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="EspLink\LICENSE.txt" />
+    <EmbeddedResource Include="..\EspMonUpdater.exe">
+      <Link>EspMonUpdater.exe</Link>
+    </EmbeddedResource>
     <Content Include="esptool.exe" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

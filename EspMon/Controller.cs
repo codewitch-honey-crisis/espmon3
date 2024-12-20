@@ -1,22 +1,13 @@
-﻿using Microsoft.Win32;
-using OpenHardwareMonitor.Hardware;
-
-using System;
-using System.Collections.Concurrent;
+﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
-using System.Configuration.Install;
 using System.IO;
 using System.IO.Ports;
 using System.Linq;
 using System.Reflection;
 using System.ServiceProcess;
-using System.Text;
 using System.Threading;
-using System.Threading.Tasks;
-using System.Windows.Controls;
-using System.Xml.Linq;
 
 namespace EspMon
 {

@@ -1,0 +1,7 @@
+C:\Users\gazto\Documents\PlatformIO\Projects\espmon3\EspMonUpdater\bin\Debug\EspMonUpdater.exe.config
+C:\Users\gazto\Documents\PlatformIO\Projects\espmon3\EspMonUpdater\bin\Debug\EspMonUpdater.exe
+C:\Users\gazto\Documents\PlatformIO\Projects\espmon3\EspMonUpdater\bin\Debug\EspMonUpdater.pdb
+C:\Users\gazto\Documents\PlatformIO\Projects\espmon3\EspMonUpdater\obj\Debug\EspMonUpdater.csproj.AssemblyReference.cache
+C:\Users\gazto\Documents\PlatformIO\Projects\espmon3\EspMonUpdater\obj\Debug\EspMonUpdater.csproj.CoreCompileInputs.cache
+C:\Users\gazto\Documents\PlatformIO\Projects\espmon3\EspMonUpdater\obj\Debug\EspMonUpdater.exe
+C:\Users\gazto\Documents\PlatformIO\Projects\espmon3\EspMonUpdater\obj\Debug\EspMonUpdater.pdb

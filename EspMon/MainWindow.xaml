@@ -19,6 +19,7 @@
             <RowDefinition Height="Auto" />
             <RowDefinition Height="*" />
             <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
 
         <Label x:Name="cpuTmaxLabel" Content="CPU TMax:" DockPanel.Dock="Left" Grid.Column="0" Visibility="{Binding MainVisibility}"/>
@@ -55,5 +56,8 @@
         <ProgressBar Grid.Row="2" Grid.ColumnSpan="4" Minimum="0" Maximum="100" Value="{Binding FlashProgress}" Visibility="{Binding FlashingVisibility}"/>
         <TextBox x:Name="output" IsReadOnly="True" TextWrapping="Wrap" Margin="3" VerticalScrollBarVisibility="Visible" Grid.Row="3" Grid.ColumnSpan="4" Visibility="{Binding FlashingVisibility}" Text="{Binding OutputText}" TextChanged="output_TextChanged"/>
         <Button x:Name="back" Content="Back &lt;" Margin="3" Grid.Row="4" Grid.ColumnSpan="4" Visibility="{Binding FlashingVisibility}" Click="back_Click" IsEnabled="{Binding IsIdle}"/>
+        <StatusBar x:Name="mainStatus"  Grid.Row="5" Grid.ColumnSpan="4" >
+            <Button x:Name="updateButton" Content="Install latest version..." Visibility="{Binding UpdateVisibility}" IsEnabled="{Binding IsIdle}" Click="updateButton_Click"/>
+        </StatusBar>
     </Grid>
 </Window>

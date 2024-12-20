@@ -1,9 +1,6 @@
-﻿using Microsoft.Win32;
-
-using System;
+﻿using System;
 using Path = System.IO.Path;
 using System.Collections.ObjectModel;
-using System.Collections.Specialized;
 using System.ComponentModel;
 using System.Configuration.Install;
 using System.IO;
@@ -12,12 +9,13 @@ using System.Linq;
 using System.Reflection;
 using System.ServiceProcess;
 using System.Text;
-using System.Threading;
 using System.Threading.Tasks;
-using System.Windows.Shapes;
 using System.Windows.Threading;
 using System.Windows;
-using static System.Windows.Forms.AxHost;
+using System.Collections.Generic;
+using System.Net.Http;
+using System.Text.RegularExpressions;
+using System.Threading;
 
 namespace EspMon
 {
@@ -33,9 +31,11 @@ namespace EspMon
 		public event EventHandler UninstallComplete;
 		public event PropertyChangedEventHandler PropertyChanged;
 		public event PropertyChangingEventHandler PropertyChanging;
+		SynchronizationContext _sync;
 		public ObservableCollection<PortItem> PortItems { get; private set; } = new ObservableCollection<PortItem>();
-		public ViewModel()
+		public ViewModel(SynchronizationContext sync)
 		{
+			_sync = sync;
 			ServiceController ctl = ServiceController.GetServices()
 				.FirstOrDefault(s => s.ServiceName == "EspMon Service");
 			if (ctl != null)
@@ -45,8 +45,16 @@ namespace EspMon
 			} else
 			{
 				_controller = new HostedController();
-				_controller.PortItems = PortItems; ;
+				_controller.PortItems = PortItems;
 			}
+			_updateCheckTimer = new Timer(async (st) => {
+				_latestVersion = await TryGetLaterVersionAsync();
+				if (_latestVersion > Assembly.GetExecutingAssembly().GetName().Version)
+				{
+					((ViewModel)st)._sync.Post((st2) => { ((ViewModel)st2).UpdateVisibility = Visibility.Visible; }, st);
+				}
+			}, this, 0, 1000 * 60 * 10);
+
 		}
 		public System.Windows.Visibility FlashingVisibility { 
 			get { return _isFlashing?System.Windows.Visibility.Visible:System.Windows.Visibility.Hidden; } 
@@ -81,12 +89,12 @@ namespace EspMon
 			get { return _isIdle; }
 			set
 			{
-				//if (_isIdle != value)
-				//{
+				if (_isIdle != value)
+				{
 					PropertyChanging?.Invoke(this, new PropertyChangingEventArgs(nameof(IsIdle)));
 					_isIdle = value;
 					PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(IsIdle)));
-				//}
+				}
 			}
 		}
 
@@ -293,6 +301,131 @@ namespace EspMon
 			Dispose(true);
 			GC.SuppressFinalize(this);
 		}
+		
+		#region AutoUpdate stuff
+		static readonly Regex _scrapeTags = new Regex(@"([0-9]+\.[0-9]+\.[0-9]+\.[0-9]+)<\/h2>", RegexOptions.IgnoreCase);
+		const string tagUrl = "https://github.com/codewitch-honey-crisis/espmon3/releases";
+		const string exeUpdateUrlFormat = "https://github.com/codewitch-honey-crisis/espmon3/releases/download/{0}/EspMon.exe";
+		const string firmwareUpdateUrlFormat = "https://github.com/codewitch-honey-crisis/espmon3/releases/download/{0}/firmware.zip";
+		Timer _updateCheckTimer = null;
+		Version _latestVersion = new Version();
+		static async Task DownloadVersionAsync(Version version)
+		{
+			var localpath = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
+			using (var http = new HttpClient())
+			{
+				var url = string.Format(exeUpdateUrlFormat, version.ToString());
+				using (var input = await http.GetStreamAsync(url))
+				{
+					var filepath = Path.Combine(localpath, "EspMon.exe.download");
+					try
+					{
+						System.IO.File.Delete(filepath);
+					}
+					catch { }
+					using (var output = System.IO.File.OpenWrite(filepath))
+					{
+						await input.CopyToAsync(output);
+					}
+				}
+				url = string.Format(firmwareUpdateUrlFormat, version.ToString());
+				using (var input = await http.GetStreamAsync(url))
+				{
+					var filepath = Path.Combine(localpath, "firmware.zip.download");
+					try
+					{
+						System.IO.File.Delete(filepath);
+					}
+					catch { }
+					using (var output = System.IO.File.OpenWrite(filepath))
+					{
+						await input.CopyToAsync(output);
+					}
+				}
+			}
+
+		}
+		static async Task<Version> TryGetLaterVersionAsync()
+		{
+			try
+			{
+				var ver = Assembly.GetExecutingAssembly().GetName().Version;
+				using (var http = new HttpClient())
+				{
+					var versions = new List<Version>();
+					using (var reader = new StreamReader(await http.GetStreamAsync(tagUrl)))
+					{
+						var match = _scrapeTags.Match(reader.ReadToEnd());
+						while (match.Success)
+						{
+							Version v;
+							if (Version.TryParse(match.Groups[1].Value, out v))
+							{
+								versions.Add(v);
+							}
+							match = match.NextMatch();
+						}
+					}
+					versions.Sort();
+					var result = versions[versions.Count - 1];
+					if (result > ver)
+					{
+						return result;
+					}
+				}
+			}
+			catch { }
+			return new Version();
+		}
+		static async Task ExtractUpdaterAsync()
+		{
+			var localpath = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
+			using (Stream input = Assembly.GetExecutingAssembly().GetManifestResourceStream("EspMon.EspMonUpdater.exe"))
+			{
+				if (input == null)
+				{
+					throw new Exception("Could not extract updater");
+				}
+				using (var output = System.IO.File.OpenWrite(Path.Combine(localpath, "EspMonUpdater.exe")))
+				{
+					await input.CopyToAsync(output);
+				}
+			}
+		}
+		public async Task<bool> PrepareUpdateAsync()
+		{
+			try
+			{
+				var ver = await TryGetLaterVersionAsync();
+				if (Assembly.GetExecutingAssembly().GetName().Version < ver)
+				{
+					await DownloadVersionAsync(ver);
+					await ExtractUpdaterAsync();
+					return true;
+				}
+			}
+			catch { }
+			return false;
+		}
+		private Visibility _updateVisibility=Visibility.Collapsed;
+		public Visibility UpdateVisibility
+		{
+			get
+			{
+				return _updateVisibility;
+			}
+			set
+			{
+				if (_updateVisibility != value)
+				{
+					PropertyChanging?.Invoke(this, new PropertyChangingEventArgs(nameof(UpdateVisibility)));
+					_updateVisibility = value;
+					PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(UpdateVisibility)));
+				}
+			}
+		}
+		#endregion
+
 	}
 
 	internal class PortItem : INotifyPropertyChanged
