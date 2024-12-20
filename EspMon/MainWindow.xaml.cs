@@ -439,6 +439,7 @@ namespace EspMon
 				{
 					throw new Exception("Unable to find archive entry");
 				}
+				stm.Position = 0;
 				var portName = comPortCombo.Text;
 				try
 				{
