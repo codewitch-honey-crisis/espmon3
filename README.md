@@ -25,6 +25,10 @@ Current device support (other ESP32 based devices can easily be added by editing
 
 ** presently display artifacts due to lcd_config.h settings issues
 
+### Devices with multiple USB inputs
+
+Select the UART Bridge/TTL port, not the USB native port. This project only works over a UART bridge.
+
 ### Graph axis explanation
 
 The displayed graph is vertically 1 horizontal line for every 10%, and horizontally one vertical line for every 5 seconds.
