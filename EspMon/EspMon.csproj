@@ -69,6 +69,7 @@
     <Compile Include="EspLink\Devices\Esp32S3Device.cs" />
     <Compile Include="EspLink\EspDevice.cs" />
     <Compile Include="EspLink\EspLink.Command.cs" />
+    <Compile Include="EspLink\EspLink.Connect.cs" />
     <Compile Include="EspLink\EspLink.cs" />
     <Compile Include="EspLink\EspLink.Device.cs" />
     <Compile Include="EspLink\EspLink.Flash.cs" />
@@ -81,12 +82,6 @@
     <Compile Include="EspLink\EspLink.SerialPort.cs" />
     <Compile Include="EspLink\EspLink.SpiFlash.cs" />
     <Compile Include="EspLink\EspLink.Stub.cs" />
-    <Compile Include="EspLink\Json\JsonElement.cs" />
-    <Compile Include="EspLink\Json\JsonException.cs" />
-    <Compile Include="EspLink\Json\JsonParser.cs" />
-    <Compile Include="EspLink\Json\JsonRunners.cs" />
-    <Compile Include="EspLink\Json\JsonUtility.cs" />
-    <Compile Include="EspLink\Json\JsonWriter.cs" />
     <Compile Include="EspMonInstaller.cs">
       <SubType>Component</SubType>
     </Compile>
@@ -139,8 +134,12 @@
     </EmbeddedResource>
     <None Include="app.manifest" />
     <None Include="EspLink\README.md" />
-    <EmbeddedResource Include="EspLink\Stubs\esp32.json" />
-    <EmbeddedResource Include="EspLink\Stubs\esp32s3.json" />
+    <EmbeddedResource Include="EspLink\Stubs\esp32.data" />
+    <EmbeddedResource Include="EspLink\Stubs\esp32.idx" />
+    <EmbeddedResource Include="EspLink\Stubs\esp32.text" />
+    <EmbeddedResource Include="EspLink\Stubs\esp32s3.data" />
+    <EmbeddedResource Include="EspLink\Stubs\esp32s3.idx" />
+    <EmbeddedResource Include="EspLink\Stubs\esp32s3.text" />
     <None Include="firmware.zip">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>

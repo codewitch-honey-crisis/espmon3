@@ -1,10 +1,12 @@
 ﻿using System;
 using System.Reflection;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace EL
 {
-	[AttributeUsage(AttributeTargets.Class, AllowMultiple = false, Inherited = false)]
-    public class EspDeviceAttribute : Attribute
+    [AttributeUsage(AttributeTargets.Class, AllowMultiple = false, Inherited = false)]
+    class EspDeviceAttribute : Attribute
     {
         public EspDeviceAttribute(string name, uint magic, uint id = 0)
         {
@@ -18,7 +20,7 @@ namespace EL
 		public uint Id { get; set; }
 
 	}
-	public struct EspPartitionEntry {
+    struct EspPartitionEntry {
         public uint Offset { get; } 
         public uint Size { get;  } 
 		public string Name { get; }
@@ -29,6 +31,9 @@ namespace EL
             Name = name;
         }
     }
+    /// <summary>
+    /// Represents the base class for an Espressif MCU device
+    /// </summary>
     public abstract class EspDevice
     {
         private WeakReference<EspLink> _parent;
@@ -97,7 +102,7 @@ namespace EL
         public virtual byte ROM_INVALID_RECV_MSG { get; } = 0x05;  // response if an invalid message is received
 
         // Maximum block sized for RAM and Flash writes, respectively.
-        public virtual uint ESP_RAM_BLOCK { get; } = 0x1800;
+        public virtual uint ESP_RAM_BLOCK { get; protected set; } = 0x1800;
 
         public virtual uint FLASH_WRITE_SIZE { get; } = 0x400;
 
@@ -151,7 +156,14 @@ namespace EL
 		public virtual short SPI_MOSI_DLEN_OFFS { get; } = -1;
 		public virtual short SPI_MISO_DLEN_OFFS { get; } = -1;
         public virtual byte SPI_W0_OFFS { get; } = 0;
-
+        protected virtual Task OnConnectedAsync(CancellationToken cancellationToken, int timeout)
+        {
+            return Task.CompletedTask;
+        }
+        public async Task ConnectAsync(CancellationToken cancellationToken, int timeout = -1)
+        {
+            await OnConnectedAsync(cancellationToken, timeout);
+        }
 	}
-	
+    
 }

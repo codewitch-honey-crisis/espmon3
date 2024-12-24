@@ -447,12 +447,12 @@ namespace EspMon
 					{
 						link.SerialHandshake = Handshake.RequestToSend;
 						_ViewModel.AppendOutput("Connecting...", false);
-						await link.ConnectAsync(true, 3, true, CancellationToken.None, link.DefaultTimeout, new EspProgress(_ViewModel));
+						await link.ConnectAsync(EspConnectMode.Default, 3, false, CancellationToken.None, link.DefaultTimeout, new EspProgress(_ViewModel));
 						_ViewModel.AppendOutput("done!", true);
 						_ViewModel.AppendOutput("Running Stub...", true);
 						await link.RunStubAsync(CancellationToken.None, link.DefaultTimeout, new EspProgress(_ViewModel));
 						_ViewModel.AppendOutput("", true);
-						await link.SetBaudRateAsync(115200, 115200 * 8, CancellationToken.None, link.DefaultTimeout);
+						await link.SetBaudRateAsync(115200 * 8, CancellationToken.None, link.DefaultTimeout);
 						_ViewModel.AppendOutput($"Changed baud rate to {link.BaudRate}", true);
 						_ViewModel.AppendOutput($"Flashing to offset 0x10000... ", true);
 						await link.FlashAsync(CancellationToken.None, stm, 16 * 1024, 0x10000, 3, false, link.DefaultTimeout, new EspProgress(_ViewModel));

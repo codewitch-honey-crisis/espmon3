@@ -80,7 +80,7 @@ namespace EL
 					time += 10;
 					if (timeout > -1 && time >= timeout)
 					{
-						throw new TimeoutException("The operation timed out");
+						throw new TimeoutException("The read operation timed out");
 					}
 					continue;
 				} 

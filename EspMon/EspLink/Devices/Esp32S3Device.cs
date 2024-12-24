@@ -1,9 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Security.Cryptography;
-using System.Security.Policy;
-using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace EL
@@ -105,7 +102,30 @@ namespace EL
 		public virtual uint RTC_CNTL_SDIO_FORCE { get; } = (uint)(1L << 22);
 		public virtual uint RTC_CNTL_SDIO_PD_EN { get; } = (uint)(1L << 21);
 
+		public virtual uint UARTDEV_BUF_NO_USB_OTG { get; } = 3;
+		public virtual uint UARTDEV_BUF_NO_USB_JTAG_SERIAL { get; } = 4;
+		
+		public virtual uint UARTDEV_BUF_NO { get; } = 0x3FCEF14C;
 
+		public virtual uint RTCCNTL_BASE_REG { get; } = 0x60008000;
+		public virtual uint RTC_CNTL_SWD_CONF_REG { get { return RTCCNTL_BASE_REG + 0x00B4; } }
+		public virtual uint RTC_CNTL_SWD_AUTO_FEED_EN { get; } = (uint)(1L << 31);
+		public virtual uint RTC_CNTL_SWD_WPROTECT_REG { get { return RTCCNTL_BASE_REG + 0x00B8; } }
+		public virtual uint RTC_CNTL_SWD_WKEY { get; } = 0x8F1D312A;
+
+		public virtual uint RTC_CNTL_WDTCONFIG0_REG { get { return RTCCNTL_BASE_REG + 0x0098; } }
+		public virtual uint RTC_CNTL_WDTWPROTECT_REG { get { return RTCCNTL_BASE_REG + 0x00B0; } }
+		public virtual uint RTC_CNTL_WDT_WKEY { get; } = 0x50D83AA1;
+		public override uint FLASH_WRITE_SIZE { 
+			get { 
+				if(Parent.IsStub)
+				{
+					return 0x4000;
+				}
+				return base.FLASH_WRITE_SIZE;
+			} 
+		}
+		public virtual uint USB_RAM_BLOCK { get; } = 0x800;  // Max block size USB-OTG is used
 		public virtual IReadOnlyDictionary<byte, int> FLASH_SIZES { get; } = new Dictionary<byte, int>() {
 			{ 0x00, 1*1024 },
 			{ 0x10, 2*1024 },
@@ -116,38 +136,58 @@ namespace EL
 			{ 0x60, 64*1024 },
 			{ 0x70, 128*1024 }
 		};
-		public virtual IReadOnlyDictionary<byte, int> FLASH_FREQUENCY { get; } = new Dictionary<byte, int>() {
-			{ 0x0F, 80 },
-			{ 0x00, 40 },
-			{ 0x01, 26 },
-			{ 0x02, 20 }
-		};
+
 		public override uint BOOTLOADER_FLASH_OFFSET { get; } = 0x1000;
 
-		public virtual IReadOnlyList<string> OVERRIDE_VDDSDIO_CHOICES { get; } = new string[] { "1.8V", "1.9V", "OFF" };
-		public virtual IReadOnlyList<EspPartitionEntry> MEMORY_MAP { get; } = new EspPartitionEntry[] {
-			new EspPartitionEntry( 0x00000000, 0x00010000, "PADDING"),
-			new EspPartitionEntry( 0x3F400000, 0x3F800000, "DROM"),
-			new EspPartitionEntry( 0x3F800000, 0x3FC00000, "EXTRAM_DATA"),
-			new EspPartitionEntry( 0x3FF80000, 0x3FF82000, "RTC_DRAM"),
-			new EspPartitionEntry( 0x3FF90000, 0x40000000, "BYTE_ACCESSIBLE"),
-			new EspPartitionEntry( 0x3FFAE000, 0x40000000, "DRAM"),
-			new EspPartitionEntry( 0x3FFE0000, 0x3FFFFFFC, "DIRAM_DRAM"),
-			new EspPartitionEntry( 0x40000000, 0x40070000, "IROM"),
-			new EspPartitionEntry( 0x40070000, 0x40078000, "CACHE_PRO"),
-			new EspPartitionEntry( 0x40078000, 0x40080000, "CACHE_APP"),
-			new EspPartitionEntry( 0x40080000, 0x400A0000, "IRAM"),
-			new EspPartitionEntry( 0x400A0000, 0x400BFFFC, "DIRAM_IRAM"),
-			new EspPartitionEntry( 0x400C0000, 0x400C2000, "RTC_IRAM"),
-			new EspPartitionEntry( 0x400D0000, 0x40400000, "IROM"),
-			new EspPartitionEntry( 0x50000000, 0x50002000, "RTC_DATA")
-		};
-
-		public virtual byte FLASH_ENCRYPTED_WRITE_ALIGN { get; } = 32;
 
 		public virtual uint UF2_FAMILY_ID { get; } = 0x1C5F21B0;
+		async Task<uint> GetUartNoAsync(CancellationToken cancellationToken, int timeout = -1)
+		{
+			// Read the UARTDEV_BUF_NO register to get the number of the currently used console
+			var result = (await Parent.ReadRegAsync(UARTDEV_BUF_NO,cancellationToken,timeout) & 0xFF);
+			return result;
+		}
+        async Task<bool> UsesUsbOtgAsync(CancellationToken cancellationToken, int timeout = -1) 
+		{
+			return await GetUartNoAsync(cancellationToken, timeout) == UARTDEV_BUF_NO_USB_OTG;
+		}
+		async Task<bool> UsesUsbJtagSerialAsync(CancellationToken cancellationToken, int timeout = -1)
+		{
+			return await GetUartNoAsync(cancellationToken, timeout) == UARTDEV_BUF_NO_USB_JTAG_SERIAL;
+		}
+		async Task DisableWatchdogsAsync(CancellationToken cancellationToken, int timeout = -1)
+		{
+			// When USB-JTAG/Serial is used, the RTC WDT and SWD watchdog are not reset
+			// and can then reset the board during flashing. Disable them.
+			if(await UsesUsbJtagSerialAsync(cancellationToken,timeout))
+			{
+				// disable RTC WDT
+				await Parent.WriteRegAsync(RTC_CNTL_WDTWPROTECT_REG, RTC_CNTL_WDT_WKEY, cancellationToken, 0xFFFFFFFF, 0, 0, timeout);
+				await Parent.WriteRegAsync(RTC_CNTL_WDTCONFIG0_REG, 0, cancellationToken, 0xFFFFFFFF, 0, 0, timeout);
+				await Parent.WriteRegAsync(RTC_CNTL_WDTWPROTECT_REG, 0, cancellationToken, 0xFFFFFFFF, 0, 0, timeout);
 
-
+				// Feed SW WDT
+				await Parent.WriteRegAsync(RTC_CNTL_SWD_WPROTECT_REG, RTC_CNTL_SWD_WKEY, cancellationToken, 0xFFFFFFFF, 0, 0, timeout);
+				var conf = await Parent.ReadRegAsync(RTC_CNTL_SWD_CONF_REG, cancellationToken, timeout);
+				await Parent.WriteRegAsync(RTC_CNTL_SWD_CONF_REG, conf | RTC_CNTL_SWD_AUTO_FEED_EN, cancellationToken, 0xFFFFFFFF, 0, 0, timeout);
+				await Parent.WriteRegAsync(RTC_CNTL_SWD_WPROTECT_REG, 0, cancellationToken, 0xFFFFFFFF, 0, 0, timeout);
+			}
+		}
+		protected override async Task OnConnectedAsync(CancellationToken cancellationToken, int timeout)
+		{
+			var isOtg = await UsesUsbOtgAsync(cancellationToken, timeout);
+			if(isOtg)
+			{
+				ESP_RAM_BLOCK = USB_RAM_BLOCK;
+				
+			}
+			var isJtag= await UsesUsbJtagSerialAsync(cancellationToken, timeout);
+			if (isJtag)
+			{
+				await DisableWatchdogsAsync(cancellationToken, timeout);
+			}
+		}
 
 	}
+	
 }

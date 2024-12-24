@@ -1,8 +1,6 @@
 ﻿using System;
-using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Globalization;
-using System.IO;
 using System.IO.Ports;
 using System.Management;
 using System.Threading;
@@ -15,8 +13,13 @@ namespace EL
 		string _portName;
 		SerialPort _port;
 		int _baudRate = 115200;
-		ConcurrentQueue<byte> _serialIncoming = new ConcurrentQueue<byte>();
+		//ConcurrentQueue<byte> _serialIncoming = new ConcurrentQueue<byte>();
+		readonly object _lock = new object();
+		Queue<byte> _serialIncoming = new Queue<byte>();	
 		Handshake _serialHandshake;
+		/// <summary>
+		/// The serial handshake protocol(s) to use
+		/// </summary>
 		public Handshake SerialHandshake
 		{
 			get => _serialHandshake;
@@ -33,58 +36,74 @@ namespace EL
 			if (_port == null)
 			{
 				_port = new SerialPort(_portName, 115200, Parity.None, 8, StopBits.One);
+				_port.ReceivedBytesThreshold = 1;
 				_port.DataReceived += _port_DataReceived;
 				_port.ErrorReceived += _port_ErrorReceived;
+				
+				
 			}
 			if (!_port.IsOpen)
 			{
-				for (int i = 0; i < 10; ++i)
+				try
 				{
-					try
-					{
-						_port.Open();
-						return _port;
-					}
-
-					catch { }
-					Thread.Sleep(100);
+					_port.Open();
 				}
-				throw new IOException("The port is busy");
+
+				catch { return null; }
 			}
 			return _port;
 		}
 
-		private void _port_ErrorReceived(object sender, SerialErrorReceivedEventArgs e)
+		void _port_ErrorReceived(object sender, SerialErrorReceivedEventArgs e)
 		{
 			System.Diagnostics.Debug.WriteLine("Serial error: "+e.EventType.ToString());
 		}
 
 		int ReadByteNoBlock()
 		{
-			byte result;
-			if(_serialIncoming.TryDequeue(out result))
+			lock(_lock)
 			{
-				return result;
+				if(_serialIncoming.Count>0)
+				{
+					return _serialIncoming.Dequeue();
+				}
 			}
 			return -1;
 		}
-		private async void _port_DataReceived(object sender, SerialDataReceivedEventArgs e)
+		void _port_DataReceived(object sender, SerialDataReceivedEventArgs e)
 		{
 			if(e.EventType==SerialData.Chars)
 			{
-				var port =(SerialPort)sender;
-				if (port.BytesToRead > 0) {
-					var ba = new byte[port.BytesToRead];
-					var len = await port.BaseStream.ReadAsync(ba, 0, ba.Length);
-					for (int i = 0; i < len; i++)
+				int len = _port.BytesToRead;
+				int i = -1;
+				lock (_lock)
+				{
+					try
 					{
-						_serialIncoming.Enqueue(ba[i]);
+						while (len-- > 0)
+						{
+							i = _port.ReadByte();
+							if (i < 0) break;
+							_serialIncoming.Enqueue((byte)i);
+						}
+					}
+					catch
+					{
+
 					}
 				}
 			}
 		}
-		public async Task SetBaudRateAsync(int oldBaud, int newBaud, CancellationToken cancellationToken,int timeout = -1)
+		/// <summary>
+		/// Asynchronously changes the baud rate
+		/// </summary>
+		/// <param name="newBaud">The new baud rate</param>
+		/// <param name="cancellationToken">A <see cref="CancellationToken"/> that can be used to cancel the operation</param>
+		/// <param name="timeout">The timeout in milliseconds</param>
+		/// <returns>A waitable <see cref="Task"/></returns>
+		public async Task SetBaudRateAsync(int newBaud, CancellationToken cancellationToken,int timeout = -1)
 		{
+			int oldBaud = _baudRate;
 			_baudRate = newBaud;
 			if (Device == null || _inBootloader == false)
 			{
@@ -102,8 +121,9 @@ namespace EL
 				_port.DiscardInBuffer();
 			}
 		}
-		
-		
+		/// <summary>
+		/// Gets or sets the baud rate
+		/// </summary>
 		public int BaudRate
 		{
 			get
@@ -114,10 +134,13 @@ namespace EL
 			{
 				if(value!=_baudRate)
 				{
-					SetBaudRateAsync(_baudRate, value, CancellationToken.None,DefaultTimeout).Wait();			
+					SetBaudRateAsync(value, CancellationToken.None,DefaultTimeout).Wait();			
 				}
 			}
 		}
+		/// <summary>
+		/// Closes the link
+		/// </summary>
 		public void Close()
 		{
 			if (_port != null)
@@ -134,6 +157,23 @@ namespace EL
 			}
 			Cleanup();
 		}
+		/// <summary>
+		/// Finds a COM port with a particular name
+		/// </summary>
+		/// <param name="name">The port name</param>
+		/// <returns>A tuple indicating the name, id, long name, VID, PID, and description of the port</returns>
+		/// <exception cref="ArgumentException">The port was not found</exception>
+		public static (string Name, string Id, string LongName, string Vid, string Pid, string Description) FindComPort(string name)
+		{
+			foreach (var port in GetComPorts())
+			{
+				if (port.Name.Equals(name, StringComparison.OrdinalIgnoreCase))
+				{
+					return port;
+				}
+			}
+			throw new ArgumentException("The COM port was not found", nameof(name));
+		}
 		private static int GetComPortNum(string portName)
 		{
 			if (!string.IsNullOrEmpty(portName))
@@ -141,7 +181,7 @@ namespace EL
 				if (portName.StartsWith("COM", StringComparison.OrdinalIgnoreCase))
 				{
 					int result;
-					if (int.TryParse(portName.Substring(4), System.Globalization.NumberStyles.Number, CultureInfo.InvariantCulture.NumberFormat, out result))
+					if (int.TryParse(portName.Substring(3), System.Globalization.NumberStyles.Number, CultureInfo.InvariantCulture.NumberFormat, out result))
 					{
 						return result;
 					}
@@ -149,7 +189,11 @@ namespace EL
 			}
 			return 0;
 		}
-		public static List<(string Name, string Id, string LongName, string Vid, string Pid, string Description)> GetComPorts()
+		/// <summary>
+		/// Retrieves a list of the COM ports
+		/// </summary>
+		/// <returns>A read-only list of tuples indicating the name, id, long name, VID, PID, and description of the port</returns>
+		public static IReadOnlyList<(string Name, string Id, string LongName, string Vid, string Pid, string Description)> GetComPorts()
 		{
 			var result = new List<(string Name, string Id, string LongName, string Vid, string Pid, string Description)>();
 			ManagementClass pnpCls = new ManagementClass("Win32_PnPEntity");

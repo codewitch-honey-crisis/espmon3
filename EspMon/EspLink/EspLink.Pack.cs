@@ -2,6 +2,7 @@
 
 namespace EL
 {
+	// this is all byte manipulation mess
 	partial class EspLink
 	{
 		internal static void PackUInts(byte[] data, int index, uint[] values)
@@ -41,6 +42,23 @@ namespace EL
 		{
 			return (ushort)((ushort)((x & 0xff) << 8) | ((x >> 8) & 0xff));
 		}
+		static byte[] PadTo(byte[] data, int alignment, byte pad_character = 0xFF)
+		{
+			int pad_mod = data.Length % alignment;
+			if (pad_mod != 0)
+			{
+				var result = new byte[data.Length + (alignment - pad_mod)];
+				Array.Copy(data, 0, result, 0, data.Length);
+				int end = data.Length + (alignment - pad_mod);
+				for (int i = data.Length; i < end; ++i)
+				{
+					result[i] = pad_character;
+				}
+				return result;
+			}
 
+			return data;
+		}
+		
 	}
 }

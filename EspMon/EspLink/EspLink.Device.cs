@@ -5,6 +5,9 @@ namespace EL
 {
 	partial class EspLink
 	{
+		/// <summary>
+		/// Indicates the device that is connected, or null if not connected.
+		/// </summary>
 		public EspDevice Device { get; private set; }
 		void CreateDevice(uint value, bool isId = false)
 		{

@@ -1,14 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Security.Cryptography;
-using System.Security.Policy;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace EL
 {
-    [EspDevice("ESP32", 0x00F01D83)]
+	[EspDevice("ESP32", 0x00F01D83)]
     internal class Esp32Device : EspDevice
     {
         

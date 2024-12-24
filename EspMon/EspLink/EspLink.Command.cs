@@ -19,8 +19,9 @@ namespace EL
 			for (var i = 0; i < 100; ++i)
 			{
 				var frame = ReadFrame(cancellationToken, timeout);
-				if (frame.Length < 8)
+				if (frame.Length == 4 && frame[0] == 0x4f && frame[1] == 0x48 && frame[2] == 0x41 && frame[3] == 0x49)
 				{
+					// stub loaded frame. ignore.
 					continue;
 				}
 				var ret = UnpackOpPacket(frame, 0);
@@ -124,6 +125,7 @@ namespace EL
 			}
 			else if (data.Length < 8 + index)
 			{
+				
 				throw new ArgumentException("Data is not a valid packet", nameof(data));
 			}
 			var direction = data[index++];
