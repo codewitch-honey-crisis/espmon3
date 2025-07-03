@@ -70,7 +70,7 @@ static bool lcd_flush_ready(esp_lcd_panel_io_handle_t panel_io,
 // flush a bitmap to the display
 static void uix_on_flush(const rect16& bounds,
                              const void *bitmap, void* state) {
-    // adjust end coordinates for a quirk of Espressif's API (add 1 to each)
+    //printf("flush (%d, %d)-(%d, %d)\n",bounds.x1, bounds.y1, bounds.x2, bounds.y2);
     lcd_panel_draw_bitmap(bounds.x1, bounds.y1, bounds.x2, bounds.y2,
                               (void *)bitmap);
 #ifndef LCD_DMA 
@@ -794,7 +794,7 @@ void loop() {
         
         ++index;
     }
-    if(index>=5) {
+    if(index>=5 && !disconnected_label.visible()) {
         index = 0;
         to_avg total;
         memset(&total,0,sizeof(total));
@@ -816,7 +816,7 @@ void loop() {
         disp.update();   
     }
     
-    if(ts_count>=10) { // 1 second
+    if(ts_count>=10 && !disconnected_label.visible()) { // 1 second
         ts_count = 0;
         index = 0;
         cpu_usage_label.text("---");
