@@ -1081,8 +1081,10 @@ bool lcd_panel_init() {
     memset(&panel_config, 0, sizeof(panel_config));
 
     panel_config.data_width = 16;
+#if ESP_IDF_VERSION < ESP_IDF_VERSION_VAL(5, 3, 0)
     panel_config.psram_trans_align = 64;
-    panel_config.num_fbs = 1;
+#endif
+    panel_config.num_fbs = 2;
     panel_config.clk_src = LCD_CLK_SRC_DEFAULT;
     panel_config.disp_gpio_num = -1;
     panel_config.pclk_gpio_num = LCD_PIN_NUM_CLK;
@@ -1118,12 +1120,13 @@ bool lcd_panel_init() {
     panel_config.timings.vsync_pulse_width = LCD_VSYNC_PULSE_WIDTH;
     
     // TODO: test the following
-    panel_config.timings.flags.pclk_active_neg = true;
+    panel_config.timings.flags.pclk_active_neg = false;
     panel_config.timings.flags.de_idle_high = LCD_DE_IDLE_HIGH;
     panel_config.timings.flags.hsync_idle_low = !LCD_HSYNC_POLARITY;
     panel_config.timings.flags.vsync_idle_low = !LCD_VSYNC_POLARITY;
     panel_config.timings.flags.pclk_idle_high = LCD_CLK_IDLE_HIGH;
     panel_config.flags.fb_in_psram = true;  // allocate frame buffer in PSRAM
+    panel_config.bounce_buffer_size_px = LCD_VRES*LCD_HRES/10;
     ESP_ERROR_CHECK(esp_lcd_new_rgb_panel(&panel_config, &lcd_handle));
     
     /*
