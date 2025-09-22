@@ -45,7 +45,7 @@ using namespace uix;
 // lcd data
 #ifndef LCD_PIN_NUM_HSYNC
 // This works out to be 32KB - the max DMA transfer size
-static const size_t lcd_transfer_buffer_size = 32*1024;
+static const size_t lcd_transfer_buffer_size = (LCD_VRES*LCD_HRES*LCD_BIT_DEPTH+7)/80;
 #else
 // This works out to be 64KB - no DMA
 static const size_t lcd_transfer_buffer_size = 64*1024;
@@ -718,7 +718,9 @@ extern "C" void app_main() {
     main_screen.register_control(disconnected_label);
 
     disp.active_screen(main_screen);
-    disp.update();
+    while(disp.dirty()) {
+        disp.update();
+    }
 #ifndef ARDUINO
     TaskHandle_t loop_handle;
     xTaskCreate(loop_task,"loop_task",4096,nullptr,20,&loop_handle);
@@ -747,7 +749,7 @@ void loop() {
         ts_count = 0;
         if(disconnected_label.visible()) {
             disconnected_label.visible(false);
-            disp.update();
+            while(disp.dirty()) disp.update();
         }
         v=((float)resp.cpu_usage)/255.f;
         value.g0=v;
@@ -790,7 +792,7 @@ void loop() {
         gpu_heat_label.text(gpu_heat_text);
         disp.update();
         gpu_heat_bar.value(v);
-        disp.update();
+        while(disp.dirty()) disp.update();
         
         ++index;
     }
@@ -813,7 +815,7 @@ void loop() {
         history_graph.add_data(1,total.g1);
         history_graph.add_data(2,total.g2);
         history_graph.add_data(3,total.g3);
-        disp.update();   
+           
     }
     
     if(ts_count>=10 && !disconnected_label.visible()) { // 1 second
@@ -840,5 +842,5 @@ void loop() {
         disconnected_label.visible(true);
         disp.update();
     }
-
+    disp.update();
 }
